@@ -24,7 +24,7 @@ void linit()
 		lptr -> lqtail = 1 + (lptr -> lqhead = newqueue());
 		lptr -> nreaders = 0;
 		lptr -> nwriters = 0;
-		lptr[i].version = 0;
+		locks[i].version = 0;
 		kprintf("%d, %d\n", i, locks[i].version);
 	}
 	/*
