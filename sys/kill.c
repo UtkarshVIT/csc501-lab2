@@ -8,7 +8,7 @@
 #include <io.h>
 #include <q.h>
 #include <stdio.h>
-#include <lock.h>
+#include "lock.h"
 /*------------------------------------------------------------------------
  * kill  --  kill a process and remove it from the system
  *------------------------------------------------------------------------
