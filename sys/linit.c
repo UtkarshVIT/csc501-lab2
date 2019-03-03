@@ -14,6 +14,8 @@ void linit()
 	int i, j;
 	nextlock = NLOCKS-1;
 	kprintf("nlocks:%d\n", NLOCKS);
+	
+	kprintf("%d, %d, %d\n", locks[0].version, locks[1].version, locks[2].version);
 	for(i = 0; i < NLOCKS; i++)
 	{
 		lptr = &locks[i];
