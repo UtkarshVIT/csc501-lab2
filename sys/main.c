@@ -35,7 +35,7 @@ void test1 ()
 	int	lck;
 	int	pid1;
 	int	pid2;
-
+	kprintf("in test1 funx\n");
 	kprintf("\nTest 1: readers can share the rwlock\n");
 	lck  = lcreate ();
 	assert (lck != SYSERR, "Test 1 failed");
@@ -192,6 +192,7 @@ int main( )
          * The provided results do not guarantee your correctness.
          * You need to read the PA2 instruction carefully.
          */
+    kprintf("in main funx\n");
 	test1();
 	//test2();
 	//test3();
