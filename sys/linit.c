@@ -28,6 +28,6 @@ void linit()
 	for(i = 0; i < NPROC; i ++)
 		for(j = 0; j < NLOCKS; j ++)
 			lockholdtab[i][j] = 0;
-
+	kprintf("%d, %d, %d\n", locks[0].version, locks[1].version, locks[2].version);
 	kprintf("\nfinished linit\n");
 }

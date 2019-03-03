@@ -13,7 +13,7 @@ int lcreate(void)
 
     disable(ps);
     int     i=0, j;
-
+    kprintf("%d, %d, %d\n", locks[0].version, locks[1].version, locks[2].version);
     while(i<NLOCKS) 
     {
         lock=i;
