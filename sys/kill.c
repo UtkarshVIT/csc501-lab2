@@ -7,8 +7,8 @@
 #include <mem.h>
 #include <io.h>
 #include <q.h>
-#include "lock.h"
 #include <stdio.h>
+#include "lock.h"
 
 /*------------------------------------------------------------------------
  * kill  --  kill a process and remove it from the system
@@ -67,12 +67,12 @@ SYSCALL kill(int pid) {
 		unsleep(pid);
 		/* fall through	*/
 	default:
-		pptr->pstate = PRFREE;
 		for (i = 0; i < NLOCKS; i++) {
 			if (proctab[pid].locktype[i] != LNONE)
 				release(pid,i);
 		}
-	}
+		pptr->pstate = PRFREE;
+			}
 	restore(ps);
 	return (OK);
 }
