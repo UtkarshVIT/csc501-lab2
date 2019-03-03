@@ -1,35 +1,31 @@
+#include <conf.h>
+#include <i386.h>
 #include <kernel.h>
+#include <mark.h>
+#include <bufpool.h>
 #include <proc.h>
-#include <stdio.h>
+#include <sem.h>
+#include <sleep.h>
+#include <mem.h>
+#include <tty.h>
 #include <q.h>
+#include <io.h>
+#include <stdio.h>
 #include "lock.h"
 
-struct lentry locks[NLOCKS];
-int nextlock;
-int lockholdtab[NPROC][NLOCKS];
-
+struct lentry ltable[NLOCKS];
 void linit()
 {
+	int i,pid;
 	struct lentry *lptr;
-	int i, j;
-	nextlock = NLOCKS-1;
-
-	for(i = 0; i < NLOCKS; i++)
-	{
-		lptr = &locks[i];
-		lptr -> lstate = LFREE;
-		lptr -> locknum = i;
-		lptr -> lqtail = 1 + (lptr -> lqhead = newqueue());
-		lptr -> nreaders = 0;
-		lptr -> nwriters = 0;
-		kprintf("%d, %d\n", i, locks[i].version);
-	}
-	kprintf("\n\n");
-	for(i = 0; i < NLOCKS; i++)
-		kprintf("%d, %d\n", i, locks[i].version);
-
-	for(i = 0; i < NPROC; i ++)
-		for(j = 0; j < NLOCKS; j ++)
-			lockholdtab[i][j] = 0;
-	kprintf("\nfinished linit\n");
+	for (i=0 ; i<NLOCKS ; i++) {
+			(lptr = &ltable[i])->lstate = DELETED;
+			lptr->ltype = LNONE;
+			lptr->nreaders = 0;
+			lptr->lqtail = 1 + (lptr->lqhead= newqueue());
+			for(pid=0;pid<NPROC;pid++)
+			{
+				lptr->holders[pid] = LNONE;
+			}
+		}
 }

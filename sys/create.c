@@ -8,6 +8,7 @@
 #include <mem.h>
 #include <io.h>
 #include <stdio.h>
+#include "lock.h"
 
 LOCAL int newpid();
 
@@ -61,15 +62,19 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	pptr->pbase = (long) saddr;
 	pptr->pstklen = ssize;
 	pptr->psem = 0;
-	
-	pptr -> plock = 0; //
-	pptr -> plwaitret = OK; //
-	
 	pptr->phasmsg = FALSE;
 	pptr->plimit = pptr->pbase - ssize + sizeof (long);	
 	pptr->pirmask[0] = 0;
 	pptr->pnxtkin = BADPID;
 	pptr->pdevs[0] = pptr->pdevs[1] = pptr->ppagedev = BADDEV;
+
+	/*	 */
+	int ldes;
+	pptr->plreqtime = 0;
+	pptr->plwaitret = OK;
+	for(ldes = 0; ldes < NLOCKS; ldes++)
+		pptr->locktype[ldes] = LNONE;
+	/*	*/
 
 		/* Bottom of stack */
 	*saddr = MAGIC;

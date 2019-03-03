@@ -1,37 +1,44 @@
+/*
+ * lcreate.c
+ *
+ *  Created on: Apr 21, 2015
+ *      Author: Satish
+ */
+
+#include <conf.h>
+#include <i386.h>
 #include <kernel.h>
 #include <proc.h>
-#include <q.h>
-#include "lock.h"
+#include <sem.h>
+#include <mem.h>
+#include <io.h>
 #include <stdio.h>
+#include "lock.h"
 
-int newlock();
+LOCAL int newldes();
 
-int lcreate(void)
-{
-	STATWORD ps;
-    int     lock;
-
+int lcreate() {
+    STATWORD ps;
+    int ldes;
     disable(ps);
-    int     i=0, j;
-    kprintf("%d, %d, %d\n", locks[0].version, locks[1].version, locks[2].version);
-    while(i<NLOCKS) 
-    {
-        lock=i;
-        if (locks[lock].lstate==LFREE) 
-        {
-            kprintf("%d, %d, %d\n", locks[0].version, locks[1].version, locks[2].version);
-            locks[lock].lstate = LUSED;
-            locks[lock].version=locks[lock].version++;
-            if (locks[lock].version==100)
-            	locks[lock].version=0;
-            locks[lock].locknum = lock*VERSION_POSS+locks[lock].version;
-            locks[lock].nreaders = 0;
-            locks[lock].nwriters = 0;
-
-            for(j = NPROC; j >0; j--) lockholdtab[j][lock] = 0;
-                return(locks[lock].locknum);
-        }
-        i++;
+    if ((ldes = newldes()) == SYSERR) {
+        restore(ps);
+        return (SYSERR);
     }
-    return(SYSERR);
+    restore(ps);
+    return (ldes);
+}
+
+LOCAL int newldes() {
+    int i;
+
+    for (i = 0; i < NLOCKS; i++) {
+        if (ltable[i].lstate == DELETED)
+        {
+            ltable[i].lstate = LAVAILABLE;
+            ltable[i].ltype = LNONE;
+            return i;
+        }
+    }
+    return SYSERR;
 }

@@ -1,115 +1,84 @@
+/*
+ * lock.c
+ *
+ *  Created on: Apr 21, 2015
+ *      Author: Satish
+ */
+
+#include <conf.h>
 #include <kernel.h>
 #include <proc.h>
 #include <q.h>
+#include <sem.h>
 #include <stdio.h>
-#include <sleep.h>
 #include "lock.h"
 
-int lock(int ldes1, int type, int priority)
-{
+extern unsigned long ctr1000;
+int has_highprio_writer(int prio, int ldesc);
+
+int lock(int ldes1, int type, int priority) {
 	STATWORD ps;
-	struct  lentry  *lptr;
-	struct  pentry  *pptr;
-	int item, wait = 0, lockindex = ldes1 /100;
-	int i;
+	struct pentry *pptr;
 	disable(ps);
-	if ((lptr= &locks[lockindex])->lstate==LFREE || lptr -> version != ldes1 % 100) 
-	{	
-		//kprintf("should not be here nth lock %d with version %d\n",lockindex,lptr->version);
+
+	if (isbadlock(ldes1) || ltable[ldes1].lstate == DELETED || proctab[currpid].locktype[ldes1] != LNONE) {
 		restore(ps);
-		return(SYSERR);
+		return (SYSERR);
 	}
-	for (i=0;i<NLOCKS;i++)
-	{
-		if (locks[i].locknum<0 && locks[i].nwriters>2)
-		{
-			restore(ps);
-			return(SYSERR);
+
+	proctab[currpid].plwaitret = OK;
+
+	if (ltable[ldes1].ltype == LNONE) {
+		ltable[ldes1].ltype = type;
+		proctab[currpid].locktype[ldes1] = type;
+		ltable[ldes1].holders[currpid] = type;
+
+		if (type == READ) {
+			ltable[ldes1].nreaders++;
 		}
-		
-	}
-	if((locks[lockindex].nreaders == 0) && (locks[lockindex].nwriters == 0)) 
-	//wait = 0;
-	{		
-			//kprintf("in here\n");
-		lockholdtab[currpid][lockindex] ++;	
-		if(type == READ) lptr -> nreaders ++;
-		else if(type == WRITE) lptr -> nwriters ++;
-		else kprintf("Type is wrong!!!");
-		restore(ps);
-		return(OK);
-	}
-	else if((locks[lockindex].nreaders > 0) && (locks[lockindex].nwriters == 0))
-	{	
-		//kprintf("In the 2nd condition\n");
-		wait = 0;
-		if(type == READ)
-		{
-			for(item = q[lptr -> lqtail].qprev; (item != lptr -> lqhead) && (priority < q[item].qkey); item = q[item].qprev)
-			{
-				if(q[item].qtype == WRITE)
-				{
-					wait = 1;
-					(pptr = &proctab[currpid]) -> pstate = PRLWAIT;
-					pptr -> plock = ldes1;
-					pptr -> plwaitret = OK;
-					insert(currpid, lptr -> lqhead, priority);
-					q[currpid].qtype = type;
-					q[currpid].qwait = clktime;
-					resched();
-					restore(ps);
-					return pptr -> plwaitret;					
-					//break;
-				}
-				if((q[item].qtype!= READ) && (q[item].qtype!=WRITE))
-				{
-					restore (ps);
-					return (OK);
-				}
-			}	
-			if (wait==0)
-			{
-				lockholdtab[currpid][lockindex] ++;	
-						//if(type == READ) 
-				lptr -> nreaders ++;
-						//else if(type == WRITE) lptr -> nwriters ++;
-						//else kprintf("Type is wrong!!!");
-				restore(ps);
-				return(OK);
-			}
-	//	}
-		}
-		if(type == WRITE) 
-		{
-			(pptr = &proctab[currpid]) -> pstate = PRLWAIT;
-			pptr -> plock = ldes1;
-			pptr -> plwaitret = OK;
-			insert(currpid, lptr -> lqhead, priority);
-			q[currpid].qtype = type;
-			q[currpid].qwait = clktime;
-			resched();
-			restore(ps);
-			return pptr -> plwaitret;	
-		}
-		//wait = 1;
-	}
-	if((locks[lockindex].nreaders == 0) && (locks[lockindex].nwriters == 1))
-	//else kprintf("Impossible! How could I get here?");
-	//if(wait)
-	{
-		(pptr = &proctab[currpid]) -> pstate = PRLWAIT;
-		pptr -> plock = ldes1;
-		pptr -> plwaitret = OK;
-		insert(currpid, lptr -> lqhead, priority);
-		q[currpid].qtype = type;
-		q[currpid].qwait = clktime;
+	} else if (ltable[ldes1].ltype == WRITE) {
+		pptr = &proctab[currpid];
+		pptr->pstate = PRWAIT;
+		pptr->locktype[ldes1] = type;
+		pptr->plreqtime = ctr1000;
+		insert(currpid, ltable[ldes1].lqhead, priority);
 		resched();
-		restore(ps);
-		return pptr -> plwaitret;
+	} else if (ltable[ldes1].ltype == READ) {
+		if (type == WRITE) {
+			pptr = &proctab[currpid];
+			pptr->pstate = PRWAIT;
+			pptr->locktype[ldes1] = type;
+			pptr->plreqtime = ctr1000;
+			insert(currpid, ltable[ldes1].lqhead, priority);
+			resched();
+		} else if (type == READ) {
+			if (has_highprio_writer(priority, ldes1) == TRUE) {
+				pptr = &proctab[currpid];
+				pptr->pstate = PRWAIT;
+				pptr->locktype[ldes1] = type;
+				pptr->plreqtime = ctr1000;
+				insert(currpid, ltable[ldes1].lqhead, priority);
+				resched();
+			} else {
+				ltable[ldes1].ltype = type;
+				ltable[ldes1].nreaders++;
+				proctab[currpid].locktype[ldes1] = type;
+				ltable[ldes1].holders[currpid] = type;
+			}
+		}
 	}
-	if((locks[lockindex].nwriters < 0) && (locks[lockindex].nwriters<0))
-	{
-		restore(ps);
-		return SYSERR;
+	restore(ps);
+	return (proctab[currpid].plwaitret);
+}
+
+int has_highprio_writer(int prio, int ldesc) {
+	int temp;
+	temp = q[ltable[ldesc].lqtail].qprev;
+
+	for (temp = q[ltable[ldesc].lqtail].qprev; (temp != ltable[ldesc].lqhead) && (prio < q[temp].qkey); temp = q[temp].qprev) {
+		if (proctab[temp].locktype[ldesc] == WRITE) {
+			return TRUE;
+		}
 	}
+	return FALSE;
 }
