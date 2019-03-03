@@ -31,6 +31,7 @@ void linit()
 
 			*/
 	kprintf("%d, %d, %d\n", locks[0].version, locks[1].version, locks[2].version);
+	kprintf("%d, %d, %d\n", locks[0].nwriters, locks[1].nwriters, locks[2].nwriters);
 	for(i = 0; i < NPROC; i ++)
 		for(j = 0; j < NLOCKS; j ++)
 			lockholdtab[i][j] = 0;
