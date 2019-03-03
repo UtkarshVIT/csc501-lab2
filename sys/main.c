@@ -52,12 +52,81 @@ void test1 ()
 	kprintf ("Test 1 ok\n");
 }
 
+/*----------------------------------Test 2---------------------------*/
+char output2[10];
+int count2;
+void reader2 (char msg, int lck, int lprio)
+{
+        int     ret;
+
+        kprintf ("  %c: to acquire lock\n", msg);
+        lock (lck, READ, lprio);
+        output2[count2++]=msg;
+        kprintf ("  %c: acquired lock, sleep 3s\n", msg);
+        sleep (3);
+        output2[count2++]=msg;
+        kprintf ("  %c: to release lock\n", msg);
+	releaseall (1, lck);
+}
+
+void writer2 (char msg, int lck, int lprio)
+{
+	kprintf ("  %c: to acquire lock\n", msg);
+        lock (lck, WRITE, lprio);
+        output2[count2++]=msg;
+        kprintf ("  %c: acquired lock, sleep 3s\n", msg);
+        sleep (3);
+        output2[count2++]=msg;
+        kprintf ("  %c: to release lock\n", msg);
+        releaseall (1, lck);
+}
+
+void test2 ()
+{
+        count2 = 0;
+        int     lck;
+        int     rd1, rd2, rd3, rd4;
+        int     wr1;
+
+        kprintf("\nTest 2: wait on locks with priority. Expected order of"
+		" lock acquisition is: reader A, reader B, reader D, writer C & reader E\n");
+        lck  = lcreate ();
+        assert (lck != SYSERR, "Test 2 failed");
+
+	rd1 = create(reader2, 2000, 20, "reader2", 3, 'A', lck, 20);
+	rd2 = create(reader2, 2000, 20, "reader2", 3, 'B', lck, 30);
+	rd3 = create(reader2, 2000, 20, "reader2", 3, 'D', lck, 25);
+	rd4 = create(reader2, 2000, 20, "reader2", 3, 'E', lck, 20);
+        wr1 = create(writer2, 2000, 20, "writer2", 3, 'C', lck, 28);
+	
+        kprintf("-start reader A, then sleep 1s. lock granted to reader A\n");
+        resume(rd1);
+        sleep (1);
+
+        kprintf("-start writer C, then sleep 1s. writer waits for the lock\n");
+        resume(wr1);
+        sleep10 (1);
+
+
+        kprintf("-start reader B, D, E. reader B is granted lock.\n");
+        resume (rd2);
+	resume (rd3);
+	resume (rd4);
+
+
+        sleep (15);
+        kprintf("output=%s\n", output2);
+        assert(mystrncmp(output2,"ABABCCDEED",10)==0,"Test 2 FAILED\n");
+        kprintf ("Test 2 OK\n");
+}
+
+
 int main( )
 {
 	linit();
     kprintf("in main funx\n");
 	test1();
-	//test2();
+	test2();
 	//test3();
 
         /* The hook to shutdown QEMU for process-like execution of XINU.
