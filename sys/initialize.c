@@ -50,11 +50,6 @@ int	console_dev;		/* console device			*/
 int	rdyhead, rdytail;	/* head/tail of ready list (q indicies)	*/
 char	vers[100];		/* Xinu version printed at startup	*/
 
-	
-struct lentry *lptr;
-int i, j;
-nextlock = NLOCKS-1;
-
 /************************************************************************/
 /***				NOTE:				      ***/
 /***								      ***/
@@ -185,19 +180,6 @@ LOCAL int sysinit()
 
 	rdytail = 1 + (rdyhead=newqueue());/* initialize ready list */
 
-	for(i = 0; i < NLOCKS; i++)
-	{
-		(lptr = &locks[i])->lstate = LFREE;
-		lptr -> locknum = i;
-		lptr -> lqtail = 1 + (lptr -> lqhead = newqueue());
-		lptr -> nreaders = 0;
-		lptr -> nwriters = 0;
-		lptr -> version = 0;
-	}
-
-	for(i = 0; i < NPROC; i ++)
-		for(j = 0; j < NLOCKS; j ++)
-			lockholdtab[i][j] = 0;
 
 #ifdef	MEMMARK
 	_mkinit();			/* initialize memory marking */

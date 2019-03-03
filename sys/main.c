@@ -1,12 +1,13 @@
 #include <conf.h>
 #include <kernel.h>
 #include <proc.h>
-//#include "lock.h"
+#include "lock.h"
 #include <stdio.h>
 #include <q.h>
 
 int main( )
 {
+	linit();
     kprintf("in main funx\n");
 	//test1();
 	//test2();
