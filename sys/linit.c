@@ -12,7 +12,7 @@ void linit()
 			ltable[i].lstate = DELETED;
 			ltable[i].nreaders = 0;
 			ltable[i].lqhead = newqueue();
-			kprintf("%d",ltable[i].lqhead);
+			kprintf("%d\n",ltable[i].lqhead);
 			ltable[i].lqtail = 1 + ltable[i].lqhead;
 			while(j<NPROC)
 			{
