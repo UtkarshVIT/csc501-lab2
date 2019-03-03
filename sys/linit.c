@@ -24,7 +24,7 @@ void linit()
 		lptr -> nwriters = 0;
 		kprintf("%d, %d\n", i, locks[i].version);
 	}
-	krptintf("\n\n");
+	kprintf("\n\n");
 	for(i = 0; i < NLOCKS; i++)
 		kprintf("%d, %d\n", i,locks[i].version);
 
