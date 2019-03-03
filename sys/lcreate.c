@@ -19,6 +19,7 @@ int lcreate(void)
         lock=i;
         if (locks[lock].lstate==LFREE) 
         {
+            kprintf("%d, %d, %d\n", locks[0].version, locks[1].version, locks[2].version);
             locks[lock].lstate = LUSED;
             locks[lock].version=locks[lock].version++;
             if (locks[lock].version==100)
