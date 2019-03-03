@@ -24,7 +24,7 @@ void linit()
 			ltable[i].lstate = DELETED;
 			ltable[i].ltype = LNONE;
 			ltable[i].nreaders = 0;
-			ltable[i].lqhead= newqueue()
+			ltable[i].lqhead= newqueue();
 			ltable[i].lqtail = 1 + ltable[i].lqhead;
 			for(pid=0;pid<NPROC;pid++)
 			{
