@@ -3,13 +3,10 @@
 #include <proc.h>
 //#include "lock.h"
 #include <stdio.h>
+#include <q.h>
 
 int main( )
 {
-        /* These test cases are only used for test purpose.
-         * The provided results do not guarantee your correctness.
-         * You need to read the PA2 instruction carefully.
-         */
     kprintf("in main funx\n");
 	//test1();
 	//test2();
