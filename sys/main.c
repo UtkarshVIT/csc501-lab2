@@ -1,9 +1,9 @@
 #include <conf.h>
 #include <kernel.h>
 #include <proc.h>
-#include "lock.h"
+//#include "lock.h"
 #include <stdio.h>
-
+/*
 #define DEFAULT_LOCK_PRIO 20
 
 #define assert(x,error) if(!(x)){ \
@@ -19,7 +19,6 @@ int mystrncmp(char* des,char* target,int n){
     return 0;
 }
 
-/*--------------------------------Test 1--------------------------------*/
  
 void reader1 (char *msg, int lck)
 {
@@ -193,7 +192,7 @@ int main( )
          * You need to read the PA2 instruction carefully.
          */
     kprintf("in main funx\n");
-	test1();
+	//test1();
 	//test2();
 	//test3();
 
