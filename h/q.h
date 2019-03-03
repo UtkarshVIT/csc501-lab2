@@ -14,6 +14,7 @@ struct	qent	{		/* one for each process plus two for	*/
 	int	qkey;		/* key on which the queue is ordered	*/
 	int	qnext;		/* pointer to next process or tail	*/
 	int	qprev;		/* pointer to previous process or head	*/
+	unsigned long qwait; /* to store the time of entry in wait */
 };
 
 extern	struct	qent q[];

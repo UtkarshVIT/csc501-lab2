@@ -13,6 +13,7 @@
 #include <q.h>
 #include <io.h>
 #include <stdio.h>
+#include "lock.h"
 
 /*#define DETAIL */
 #define HOLESIZE	(600)	
@@ -178,6 +179,7 @@ LOCAL int sysinit()
 	}
 
 	rdytail = 1 + (rdyhead=newqueue());/* initialize ready list */
+	linit(); /* calling the lock initializer */
 
 #ifdef	MEMMARK
 	_mkinit();			/* initialize memory marking */
