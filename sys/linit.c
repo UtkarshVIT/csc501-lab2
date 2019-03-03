@@ -6,10 +6,11 @@
 struct lentry ltable[NLOCKS];
 void linit()
 {
-	int i,pid;
 	struct lentry *lptr;
-	for (i=0 ; i<NLOCKS ; i++) {
-			(lptr = &ltable[i])->lstate = DELETED;
+	int i=0,pid;
+	while (i<NLOCKS) {
+			lptr = &ltable[i];
+			lptr->lstate = DELETED;
 			lptr->ltype = LNONE;
 			lptr->nreaders = 0;
 			lptr->lqtail = 1 + (lptr->lqhead= newqueue());
@@ -17,5 +18,6 @@ void linit()
 			{
 				lptr->holders[pid] = LNONE;
 			}
+			i++;
 		}
 }
