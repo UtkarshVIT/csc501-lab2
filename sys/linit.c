@@ -1,5 +1,6 @@
 #include <kernel.h>
 #include <proc.h>
+#include <stdio.h>
 #include <q.h>
 #include "lock.h"
 
