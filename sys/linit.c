@@ -14,7 +14,7 @@ void linit()
 	int i, j;
 	nextlock = NLOCKS-1;
 	kprintf("nlocks:%d\n", NLOCKS);
-	
+
 	kprintf("%d, %d, %d\n", locks[0].version, locks[1].version, locks[2].version);
 	for(i = 0; i < NLOCKS; i++)
 	{
@@ -24,7 +24,7 @@ void linit()
 		lptr -> lqtail = 1 + (lptr -> lqhead = newqueue());
 		lptr -> nreaders = 0;
 		lptr -> nwriters = 0;
-		lptr -> version = 0;
+		lptr[i].version = 0;
 		kprintf("%d, %d\n", i, locks[i].version);
 	}
 	/*
