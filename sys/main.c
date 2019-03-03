@@ -200,7 +200,8 @@ int main( )
         /* The hook to shutdown QEMU for process-like execution of XINU.
          * This API call exists the QEMU process.
          */
-        shutdown();
+        //shutdown();
+    return 0;
 }
 
 
