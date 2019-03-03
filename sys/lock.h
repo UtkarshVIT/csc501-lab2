@@ -1,7 +1,4 @@
 #define NLOCKS 50
-
-
-/* Constants for lock state */
 #define	LAVAILABLE	1		/* this lock is available */
 
 /* Constants for lock type */
@@ -10,20 +7,19 @@
 #define LNONE	'\03' 		/* locked by no process */
 #define	isbadlock(l)	(l<0 || l>=NLOCKS)
 
-
 struct lentry{
-	char lstate;  /* lock state is LFREE or LUSED */
-	char ltype;   /* lock type is LREAD or LWRITE or LNONE */
-	int nreaders; /* to keep a track of total number of readers using the lock */
-	int lqhead;   /* Head of the waiting queue */
-	int lqtail;   /* Tail of the waiting queue */
+	char lstate;
+	char ltype;  
+	int nreaders;
+	int lqhead;  
+	int lqtail;  
 	int holders[NPROC];
 };
 
 extern struct lentry ltable[NLOCKS];
 
+int lock (int ldes1, int type, int priority);
 void linit();
-int lcreate();
 int ldelete (int lockdescriptor);
 int releaseall (int, long, ...);
-int lock (int ldes1, int type, int priority);
+int lcreate();

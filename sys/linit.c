@@ -1,16 +1,6 @@
-#include <conf.h>
-#include <i386.h>
 #include <kernel.h>
-#include <mark.h>
-#include <bufpool.h>
 #include <proc.h>
-#include <sem.h>
-#include <sleep.h>
-#include <mem.h>
-#include <tty.h>
 #include <q.h>
-#include <io.h>
-#include <stdio.h>
 #include "lock.h"
 
 struct lentry ltable[NLOCKS];
