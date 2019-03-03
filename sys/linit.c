@@ -26,7 +26,7 @@ void linit()
 	}
 	kprintf("\n\n");
 	for(i = 0; i < NLOCKS; i++)
-		kprintf("%d, %d\n", i,locks[i].version);
+		kprintf("%d, %d\n", i, locks[i].version);
 
 	for(i = 0; i < NPROC; i ++)
 		for(j = 0; j < NLOCKS; j ++)
