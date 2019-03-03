@@ -3,6 +3,7 @@
 #include <q.h>
 #include "lock.h"
 
+/*
 struct lentry locks[NLOCKS];
 int nextlock;
 int lockholdtab[NPROC][NLOCKS];
@@ -26,4 +27,4 @@ void linit()
 	for(i = 0; i < NPROC; i ++)
 		for(j = 0; j < NLOCKS; j ++)
 			lockholdtab[i][j] = 0;
-}
+}*/
