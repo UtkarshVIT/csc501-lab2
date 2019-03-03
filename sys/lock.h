@@ -1,4 +1,3 @@
-#ifndef	NLOCKS				/* set the number of locks	*/
 #define NLOCKS 50
 
 
