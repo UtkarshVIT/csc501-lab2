@@ -1,10 +1,6 @@
-#ifndef H_LOCK_H_
-#define H_LOCK_H_
-
-
 #ifndef	NLOCKS				/* set the number of locks	*/
 #define NLOCKS 50
-#endif
+
 
 /* Constants for lock state */
 #define	LAVAILABLE	1		/* this lock is available */
@@ -32,5 +28,3 @@ int lcreate();
 int ldelete (int lockdescriptor);
 int releaseall (int, long, ...);
 int lock (int ldes1, int type, int priority);
-
-#endif /* H_LOCK_H_ */
