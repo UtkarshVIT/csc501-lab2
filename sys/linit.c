@@ -23,7 +23,7 @@ void linit()
 		lptr -> nreaders = 0;
 		lptr -> nwriters = 0;
 		lptr -> version = 0;
-		kprintf("%d, %d", i, locks[i].version);
+		kprintf("%d, %d\n", i, locks[i].version);
 	}
 
 	for(i = 0; i < NPROC; i ++)
