@@ -129,7 +129,7 @@ LOCAL int sysinit()
 	struct	pentry	*pptr;
 	struct	sentry	*sptr;
 	struct	mblock	*mptr;
-
+	kprintf("in system init\n");
 	numproc = 0;			/* initialize system variables */
 	nextproc = NPROC-1;
 	nextsem = NSEM-1;
@@ -177,6 +177,7 @@ LOCAL int sysinit()
 		(sptr = &semaph[i])->sstate = SFREE;
 		sptr->sqtail = 1 + (sptr->sqhead = newqueue());
 	}
+
 
 	rdytail = 1 + (rdyhead=newqueue());/* initialize ready list */
 
