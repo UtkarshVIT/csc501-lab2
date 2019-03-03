@@ -16,7 +16,7 @@ void linit()
 
 	for(i = 0; i < NLOCKS; i++)
 	{
-		lptr = &locks[i]
+		lptr = &locks[i];
 		lptr -> lstate = LFREE;
 		lptr -> locknum = i;
 		lptr -> lqtail = 1 + (lptr -> lqhead = newqueue());
