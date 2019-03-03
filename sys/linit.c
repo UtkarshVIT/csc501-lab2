@@ -13,7 +13,7 @@ void linit()
 	struct lentry *lptr;
 	int i, j;
 	nextlock = NLOCKS-1;
-
+	kprintf("nlocks:%d\n", NLOCKS);
 	for(i = 0; i < NLOCKS; i++)
 	{
 		lptr = &locks[i];
