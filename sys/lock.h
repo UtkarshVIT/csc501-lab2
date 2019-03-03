@@ -1,14 +1,6 @@
-/*
- * lock.h
- *
- *  Created on: Apr 21, 2015
- *      Author: Satish
- */
-
 #ifndef H_LOCK_H_
 #define H_LOCK_H_
 
-#include "proc.h"
 
 #ifndef	NLOCKS				/* set the number of locks	*/
 #define NLOCKS 50

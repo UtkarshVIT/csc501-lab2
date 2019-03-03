@@ -4,10 +4,6 @@
 #define _PROC_H_
 /* process table declarations and defined constants			*/
 
-#ifndef	NLOCKS				/* set the number of locks	*/
-#define NLOCKS 50
-#endif
-
 #ifndef	NPROC				/* set the number of processes	*/
 #define	NPROC		30		/*  allowed if not already done	*/
 #endif
@@ -66,7 +62,7 @@ struct	pentry	{
 
 	int plwaitret;
 	unsigned int plreqtime;
-	int locktype[NLOCKS];
+	int locktype[50];
 };
 
 
