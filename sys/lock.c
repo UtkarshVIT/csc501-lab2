@@ -32,13 +32,13 @@ int lock(int ldes1, int type, int priority) {
 	else if (ltable[ldes1].ltype == READ) {
 		/* If the request type is WRITE */
 		if (type == WRITE) {
-			insert_in_prio_queue(int currpid, int ldes1, int priority);
+			insert_in_prio_queue(int currpid, int ldes1, int priority, int type);
 			
 		}
 		/* If the request type is READ */
 		else if (type == READ) {
 			if (has_highprio_writer(priority, ldes1) == TRUE) {
-				insert_in_prio_queue(int currpid, int ldes1, int priority);
+				insert_in_prio_queue(int currpid, int ldes1, int priority, int type);
 			} 
 			else {
 				ltable[ldes1].ltype = type;
@@ -50,14 +50,14 @@ int lock(int ldes1, int type, int priority) {
 	}
 
 	else if (ltable[ldes1].ltype == WRITE) {
-		insert_in_prio_queue(int currpid, int ldes1, int priority);
+		insert_in_prio_queue(int currpid, int ldes1, int priority, int type);
 	} 
 
 	restore(ps);
 	return (proctab[currpid].plwaitret);
 }
 
-void insert_in_prio_queue(int currpid, int ldes1, int priority){
+void insert_in_prio_queue(int currpid, int ldes1, int priority, int type){
 	struct pentry *pptr;
 	pptr = &proctab[currpid];
 	pptr->pstate = PRWAIT;
