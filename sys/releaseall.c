@@ -81,10 +81,6 @@ int release(int pid, int lock_index){
     }
 
 int get_next_process(int ldesc, int *high_prio){
-    if(q[ltable[ldesc].lqtail].qprev == ltable[ldesc].lqhead)
-    {
-        return SYSERR;
-    }
 
     int pid_1 = q[ltable[ldesc].lqtail].qprev;
     int pid_2;
