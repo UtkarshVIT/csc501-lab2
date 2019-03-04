@@ -87,14 +87,16 @@ int get_next_process(int lock_index, int *high_prio){
     
     while(ctr != ltable[lock_index].lqhead){
         if(proctab[ctr].locktype[lock_index] == WRITE){
-            if(best_writer_priority <= q[ctr].qkey )
+            if(best_writer_priority <= q[ctr].qkey ){
                 best_writer_priority = q[ctr].qkey;
                 best_writer = ctr;
+            }
         }
         else{
-            if(best_reader_priority <= q[ctr].qkey)
+            if(best_reader_priority <= q[ctr].qkey){
                 best_reader_priority = q[ctr].qkey;
                 best_reader = ctr;
+            }
         }
     }
     if(best_writer_priority>best_reader_priority){
