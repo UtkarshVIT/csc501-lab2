@@ -20,6 +20,6 @@ extern struct lentry ltable[NLOCKS];
 
 int lock (int ldes1, int type, int priority);
 void linit();
-int ldelete (int lockdescriptor);
-int releaseall (int, long, ...);
+int ldelete(int lockdescriptor);
+int releaseall(int, int, ...);
 int lcreate();
