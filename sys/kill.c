@@ -14,6 +14,15 @@
  * kill  --  kill a process and remove it from the system
  *------------------------------------------------------------------------
  */
+void release_all_locks_for_process(int pid){
+	int i = 0 ;
+	while(i < NLOCKS) {
+		if (proctab[pid].locktype[i] != FREE)
+			release(pid, i);
+		++i;
+	}
+}
+
 SYSCALL kill(int pid) {
 	STATWORD ps;
 	struct pentry *pptr; /* points to proc. table for pid*/
@@ -43,10 +52,7 @@ SYSCALL kill(int pid) {
 	switch (pptr->pstate) {
 
 	case PRCURR:
-		for (i = 0; i < NLOCKS; i++) {
-			if (proctab[pid].locktype[i] != FREE)
-				release(pid,i);
-		}
+		release_all_locks_for_process(pid);
 		pptr->pstate = PRFREE; /* suicide */
 		resched();
 
@@ -54,10 +60,7 @@ SYSCALL kill(int pid) {
 		semaph[pptr->psem].semcnt++;
 
 	case PRREADY:
-		for (i = 0; i < NLOCKS; i++) {
-			if (proctab[pid].locktype[i] != FREE)
-				release(pid,i);
-		}
+		release_all_locks_for_process(pid);
 		dequeue(pid);
 		pptr->pstate = PRFREE;
 		break;
@@ -67,10 +70,7 @@ SYSCALL kill(int pid) {
 		unsleep(pid);
 		/* fall through	*/
 	default:
-		for (i = 0; i < NLOCKS; i++) {
-			if (proctab[pid].locktype[i] != FREE)
-				release(pid,i);
-		}
+		release_all_locks_for_process(pid);
 		pptr->pstate = PRFREE;
 			}
 	restore(ps);
