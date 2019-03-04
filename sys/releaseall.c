@@ -88,7 +88,7 @@ int get_next_process(int lock_index, int *high_prio){
 
     int best_writer;
     int best_writer_priority = -1;   
-    if(ctr == ltable[ldesc].lqhead)
+    if(ctr == ltable[lock_index].lqhead)
     {
         return -1;
     }
