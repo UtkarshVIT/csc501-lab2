@@ -10,15 +10,10 @@ void linit()
 	while(i<NLOCKS){
 		ltable[i].ltype = FREE;
 		ltable[i].lstate = LAVAILABLE;
-		ltable[i].nreaders = 0;
+		ltable[i].reader_count = 0;
+		ltable[i].writer_count = 0;
 		ltable[i].lqhead = newqueue();
 		ltable[i].lqtail = 1 + ltable[i].lqhead;
-		j=0;
-		while(j<NPROC)
-		{
-			//ltable[i].holders[j] = -1;
-			++j;
-		}
 		++i;
 	}
 }

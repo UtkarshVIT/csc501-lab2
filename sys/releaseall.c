@@ -64,51 +64,52 @@ int release(int pid, int lock_index){
     //ltable[lock_index].holders[pid] = FREE;
 
     if(ltable[lock_index].ltype == READ)
-        if(--ltable[lock_index].nreaders)
+        if(--ltable[lock_index].reader_count)
             return OK;
-        kprintf("entering this\n");
-        nextpid = get_next_process(lock_index, &max_w_prio);
-        kprintf("exiting this, returned: %d, %d\n", nextpid, max_w_prio);
-        if(nextpid == -1){
-            kprintf("in none");
-            ltable[lock_index].ltype = FREE;
-            return OK;
-        }
+    else
+        --ltable[lock_index].writer_count;
 
-        if(proctab[nextpid].locktype[lock_index] == READ){
-            kprintf("in read\n");
-            int ctr = q[nextpid].qprev;
-            dequeue(nextpid);
-            ready(nextpid,RESCHNO);
-            //ltable[lock_index].holders[nextpid] = READ;
-            ltable[lock_index].nreaders++;
-            ltable[lock_index].ltype = READ;
-
-            while(ctr != ltable[lock_index].lqhead){
-                if(proctab[ctr].locktype[lock_index] == READ){
-                    kprintf("unlocking\n");
-                    ltable[lock_index].nreaders++;
-                    dequeue(ctr);
-                    ready(ctr,RESCHNO);
-                    //ltable[lock_index].holders[ctr] = READ;
-                    ctr=q[ctr].qprev;
-                }
-                else{
-                    break;
-                }
-            }
-        }
-
-        else{
-            kprintf("in write\n");
-            ltable[lock_index].ltype = WRITE;
-            dequeue(nextpid);
-            ready(nextpid,RESCHNO);
-            //ltable[lock_index].holders[nextpid] = WRITE;
-        }
-
+    kprintf("entering this\n");
+    nextpid = get_next_process(lock_index, &max_w_prio);
+    kprintf("exiting this, returned: %d, %d\n", nextpid, max_w_prio);
+        
+    if(nextpid == -1){
+        kprintf("in none");
+        ltable[lock_index].ltype = FREE;
         return OK;
     }
+
+    if(proctab[nextpid].locktype[lock_index] == READ){
+        kprintf("in read\n");
+        int ctr = q[nextpid].qprev;
+        dequeue(nextpid);
+        ready(nextpid,RESCHNO);
+        ltable[lock_index].reader_count++;
+        ltable[lock_index].ltype = READ;
+        while(ctr != ltable[lock_index].lqhead){
+            if(proctab[ctr].locktype[lock_index] == READ){
+                kprintf("unlocking\n");
+                ltable[lock_index].reader_count++;
+                dequeue(ctr);
+                ready(ctr,RESCHNO);
+                    ctr=q[ctr].qprev;
+            }
+            else{
+                break;
+            }
+        }
+    }
+
+    else{
+        kprintf("in write\n");
+        ltable[lock_index].ltype = WRITE;
+        ltable[lock_index].writer_count++;
+        dequeue(nextpid);
+        ready(nextpid,RESCHNO);
+    }
+
+    return OK;
+}
 
 int releaseall(int numlocks, int locks, ...)
 {

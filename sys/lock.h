@@ -10,10 +10,10 @@
 struct lentry{
 	int lstate;
 	int ltype;  
-	int nreaders;
+	int reader_count;
+	int writer_count;
 	int lqhead;  
-	int lqtail;  
-	//int holders[NPROC];
+	int lqtail;
 };
 
 extern struct lentry ltable[NLOCKS];

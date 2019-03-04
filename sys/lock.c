@@ -25,7 +25,10 @@ int lock(int lock_index, int lock_type, int priority){
 		//ltable[lock_index].holders[currpid] = lock_type;
 
 		if(lock_type == READ){
-			ltable[lock_index].nreaders++;
+			ltable[lock_index].reader_count++;
+		}
+		else{
+			ltable[lock_index].writer_count++;
 		}
 	}
 
@@ -54,8 +57,7 @@ int lock(int lock_index, int lock_type, int priority){
 
 			else{
 				proctab[currpid].locktype[lock_index] = lock_type;
-				//ltable[lock_index].holders[currpid] = lock_type;
-				ltable[lock_index].nreaders += 1;
+				ltable[lock_index].reader_count += 1;
 				ltable[lock_index].ltype = lock_type;
 			}
 		}
