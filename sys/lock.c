@@ -8,7 +8,7 @@
 
 extern unsigned long ctr1000;
 int has_highprio_writer(int prio, int ldesc);
-void insert_in_prio_queue(int currpid, int ldes1, int priority);
+void insert_in_prio_queue(int currpid, int ldes1, int priority, int type);
 
 int lock(int ldes1, int type, int priority) {
 	STATWORD ps;
