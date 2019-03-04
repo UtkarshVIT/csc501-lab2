@@ -31,7 +31,7 @@ int releaseall(int numlocks, int locks, ...)
 }
 
 int release(int pid, int lock_index){
-    int pid_;
+    int pid;
     int proceed = 1, nextpid = 0, max_w_prio = 0;
 
     proctab[pid].locktype[lock_index] = LNONE;
@@ -49,14 +49,25 @@ int release(int pid, int lock_index){
     }
     
     if(proctab[nextpid].locktype[lock_index] == READ){
-        pid_ = q[nextpid].qprev;
+        pid = q[nextpid].qprev;
         dequeue(nextpid);
         ready(nextpid,RESCHNO);
         ltable[lock_index].holders[nextpid] = READ;
         ltable[lock_index].nreaders++;
-        remote_readers(lock_index,pid_, max_w_prio);
         ltable[lock_index].ltype = READ;
+        while(pid != ltable[lock_index].lqhead && q[pid].qkey >= max_w_prio){
+            if(proctab[pid].locktype[lock_index] == READ){
+                ltable[lock_index].nreaders++;
+                dequeue(pid);
+                ready(pid,RESCHNO);
+                ltable[lock_index].holders[pid] = READ;
+                pid=q[pid].qprev;
+            }
+            else
+                break;
+        }
     }
+
     else{
         ltable[lock_index].ltype = WRITE;
         dequeue(nextpid);
@@ -65,23 +76,6 @@ int release(int pid, int lock_index){
     }
 
     return OK;
-}
-
-void remote_readers(int lock_index, int pid_, int high_prio){
-    int pid = pid_;
-
-    while(pid != ltable[lock_index].lqhead && q[pid].qkey >= high_prio){
-        if(proctab[pid].locktype[lock_index] == READ){
-            ltable[lock_index].nreaders++;
-            dequeue(pid);
-            ready(pid,RESCHNO);
-            ltable[lock_index].holders[pid] = READ;
-            pid=q[pid].qprev;
-        }
-
-        else
-            break;
-    }
 }
 
 int get_next_process(int ldesc, int *high_prio){
