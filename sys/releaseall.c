@@ -1,10 +1,3 @@
-/*
- * releaseall.c
- *
- *  Created on: Apr 21, 2015
- *      Author: Satish
- */
-
 #include <conf.h>
 #include <kernel.h>
 #include <proc.h>

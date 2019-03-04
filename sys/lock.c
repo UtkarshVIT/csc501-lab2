@@ -1,10 +1,3 @@
-/*
- * lock.c
- *
- *  Created on: Apr 21, 2015
- *      Author: Satish
- */
-
 #include <conf.h>
 #include <kernel.h>
 #include <proc.h>
@@ -15,19 +8,16 @@
 
 extern unsigned long ctr1000;
 int has_highprio_writer(int prio, int ldesc);
+void insert_in_prio_queue(int currpid, int ldes1, int priority);
 
 int lock(int ldes1, int type, int priority) {
 	STATWORD ps;
-	struct pentry *pptr;
-	disable(ps);
 
-	if (isbadlock(ldes1) || ltable[ldes1].lstate == DELETED || proctab[currpid].locktype[ldes1] != LNONE) {
-		restore(ps);
-		return (SYSERR);
-	}
+	disable(ps);
 
 	proctab[currpid].plwaitret = OK;
 
+	/* If the lock type in LNONE */
 	if (ltable[ldes1].ltype == LNONE) {
 		ltable[ldes1].ltype = type;
 		proctab[currpid].locktype[ldes1] = type;
@@ -36,30 +26,21 @@ int lock(int ldes1, int type, int priority) {
 		if (type == READ) {
 			ltable[ldes1].nreaders++;
 		}
-	} else if (ltable[ldes1].ltype == WRITE) {
-		pptr = &proctab[currpid];
-		pptr->pstate = PRWAIT;
-		pptr->locktype[ldes1] = type;
-		pptr->plreqtime = ctr1000;
-		insert(currpid, ltable[ldes1].lqhead, priority);
-		resched();
-	} else if (ltable[ldes1].ltype == READ) {
+	}
+
+	/* If the lock type for this already READ */
+	else if (ltable[ldes1].ltype == READ) {
+		/* If the request type is WRITE */
 		if (type == WRITE) {
-			pptr = &proctab[currpid];
-			pptr->pstate = PRWAIT;
-			pptr->locktype[ldes1] = type;
-			pptr->plreqtime = ctr1000;
-			insert(currpid, ltable[ldes1].lqhead, priority);
-			resched();
-		} else if (type == READ) {
+			insert_in_prio_queue(int currpid, int ldes1, int priority);
+			
+		}
+		/* If the request type is READ */
+		else if (type == READ) {
 			if (has_highprio_writer(priority, ldes1) == TRUE) {
-				pptr = &proctab[currpid];
-				pptr->pstate = PRWAIT;
-				pptr->locktype[ldes1] = type;
-				pptr->plreqtime = ctr1000;
-				insert(currpid, ltable[ldes1].lqhead, priority);
-				resched();
-			} else {
+				insert_in_prio_queue(int currpid, int ldes1, int priority);
+			} 
+			else {
 				ltable[ldes1].ltype = type;
 				ltable[ldes1].nreaders++;
 				proctab[currpid].locktype[ldes1] = type;
@@ -67,10 +48,24 @@ int lock(int ldes1, int type, int priority) {
 			}
 		}
 	}
+
+	else if (ltable[ldes1].ltype == WRITE) {
+		insert_in_prio_queue(int currpid, int ldes1, int priority);
+	} 
+
 	restore(ps);
 	return (proctab[currpid].plwaitret);
 }
 
+void insert_in_prio_queue(int currpid, int ldes1, int priority){
+	struct pentry *pptr;
+	pptr = &proctab[currpid];
+	pptr->pstate = PRWAIT;
+	pptr->locktype[ldes1] = type;
+	pptr->plreqtime = ctr1000;
+	insert(currpid, ltable[ldes1].lqhead, priority);
+	resched();
+}
 int has_highprio_writer(int prio, int ldesc) {
 	int temp;
 	temp = q[ltable[ldesc].lqtail].qprev;

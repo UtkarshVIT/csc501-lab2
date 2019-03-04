@@ -6,9 +6,9 @@ LOCAL int newldes();
 
 int lcreate() {
     STATWORD ps;
-    int ldes, i;
+    int ldes, i=0;
     disable(ps);
-    for (i = 0; i < NLOCKS; i++) {
+    while (i < NLOCKS) {
         if (ltable[i].lstate == DELETED)
         {
             ltable[i].lstate = LAVAILABLE;
@@ -16,6 +16,7 @@ int lcreate() {
             restore(ps);
             return i;
         }
+        ++i;
     }
     
 }
