@@ -46,12 +46,12 @@ int lock(int lock_index, int lock_type, int priority) {
 		/* If the request lock_type is READ */
 		else if(lock_type == READ) {
 			int temp;
-			bool flag = FALSE;
+			int flag = 0;
 			temp = q[ltable[lock_index].lqtail].qprev;
 
 			for (temp = q[ltable[lock_index].lqtail].qprev; (temp != ltable[lock_index].lqhead) && (priority < q[temp].qkey); temp = q[temp].qprev) {
 				if (proctab[temp].locktype[lock_index] == WRITE) {
-					flag = TRUE;
+					flag = 1;
 					break;
 				}
 			}
