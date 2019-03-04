@@ -117,7 +117,7 @@ int get_next_process(int lock_index, int *high_prio){
         return best_reader;
     }
     else{
-        if((proctab[best_reader].plreqtime - proctab[best_writer].plreqtime)>600){
+        if(proctab[best_reader].plreqtime > proctab[best_writer].plreqtime){
             *high_prio=-1;
             return best_writer;
         }
