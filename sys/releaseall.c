@@ -11,18 +11,19 @@ int release(int pid, int ldes);
 int get_next_process(int ldesc, int *high_prio);
 void remote_readers(int ldesc, int pid_, int high_prio);
 
-int releaseall(int numlocks, long locks, ...)
+int releaseall(int numlocks, int locks, ...)
 {
     STATWORD ps;
     int ret = OK;
-    int ldes;
+    int lock_index;
+    int* base_add = &locks;
     int i;
     disable(ps);
 
     for(i=0;i<numlocks;i++)
     {
-        ldes = (int)*((&locks) + i);
-        ret = release(currpid, ldes);
+        lock_index = (int)*(base_add+i);
+        ret = release(currpid, lock_index);
     }
     resched();
     restore(ps);
