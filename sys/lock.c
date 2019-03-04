@@ -1,9 +1,6 @@
-#include <conf.h>
 #include <kernel.h>
 #include <proc.h>
 #include <q.h>
-#include <sem.h>
-#include <stdio.h>
 #include "lock.h"
 
 extern unsigned long ctr1000;
@@ -18,7 +15,6 @@ void insert_in_prio_queue(int lock_index, int priority, int lock_type){
 
 int lock(int lock_index, int lock_type, int priority) {
 	STATWORD ps;
-
 	disable(ps);
 
 	proctab[currpid].plwaitret = OK;
@@ -58,12 +54,13 @@ int lock(int lock_index, int lock_type, int priority) {
 
 			if(flag) {
 				insert_in_prio_queue(lock_index, priority, lock_type);
-			} 
+			}
+
 			else{
 				proctab[currpid].locktype[lock_index] = lock_type;
 				ltable[lock_index].holders[currpid] = lock_type;
+				ltable[lock_index].nreaders += 1;
 				ltable[lock_index].ltype = lock_type;
-				ltable[lock_index].nreaders += 1;	
 			}
 		}
 	}
