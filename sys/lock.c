@@ -6,8 +6,8 @@
 extern unsigned long ctr1000;
 
 void insert_in_prio_queue(int lock_index, int priority, int lock_type){
-	proctab[currpid].pstate = PRWAIT;
 	proctab[currpid].locktype[lock_index] = lock_type;
+	proctab[currpid].pstate = PRWAIT;	
 	proctab[currpid].plreqtime = ctr1000;
 	insert(currpid, lock_list[lock_index].lock_qhead, priority);
 	resched();
@@ -16,7 +16,6 @@ void insert_in_prio_queue(int lock_index, int priority, int lock_type){
 int lock(int lock_index, int lock_type, int priority){
 	STATWORD ps;
 	disable(ps);
-	kprintf("locking\n");
 
 	/* If the lock lock_type in FREE */
 	if(lock_list[lock_index].lock_type == FREE){

@@ -4,7 +4,7 @@
 
 int lcreate() {
     STATWORD ps;
-    int ldes, i=0;
+    int i=0;
     disable(ps);
     while (i < NLOCKS) {
         if (lock_list[i].lock_type == DELETED || lock_list[i].lock_type == FREE){
@@ -14,5 +14,4 @@ int lcreate() {
         }
         ++i;
     }
-    
 }
