@@ -40,7 +40,7 @@ int release(int pid, int lock_index){
             return OK;
         kprintf("entering this\n");
         nextpid = get_next_process(lock_index, &max_w_prio);
-        kprintf("exiting this\n");
+        kprintf("exiting this, returned: %d\n", nextpid);
         if(nextpid == -1){
             kprintf("in none");
             ltable[lock_index].ltype = LNONE;
