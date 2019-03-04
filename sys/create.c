@@ -71,7 +71,6 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	/*	 */
 	int ldes;
 	pptr->plreqtime = 0;
-	pptr->plwaitret = OK;
 	for(ldes = 0; ldes < NLOCKS; ldes++)
 		pptr->locktype[ldes] = LNONE;
 	/*	*/
