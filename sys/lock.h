@@ -5,7 +5,6 @@
 #define READ   '\01'       /* locked by a reader */
 #define WRITE  '\02'		/* locked by a writer */
 #define LNONE	'\03' 		/* locked by no process */
-#define	isbadlock(l)	(l<0 || l>=NLOCKS)
 
 struct lentry{
 	char lstate;
