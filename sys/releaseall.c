@@ -9,7 +9,7 @@
 
 int release(int pid, int ldes);
 int get_next_process(int ldesc, int *high_prio);
-
+extern unsigned long ctr1000;
 int releaseall(int numlocks, int locks, ...)
 {
     STATWORD ps;
