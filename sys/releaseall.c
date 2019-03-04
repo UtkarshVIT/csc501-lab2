@@ -90,13 +90,11 @@ int get_next_process(int lock_index, int *high_prio){
             if(best_writer_priority <= q[ctr].qkey )
                 best_writer_priority = q[ctr].qkey;
                 best_writer = ctr;
-                best_writer_wait=proctab[ctr].plreqtime;
         }
         else{
             if(best_reader_priority <= q[ctr].qkey)
                 best_reader_priority = q[ctr].qkey;
                 best_reader = ctr;
-                best_reader_wait = proctab[ctr].plreqtime;
         }
     }
     if(best_writer_priority>best_reader_priority){
@@ -108,10 +106,10 @@ int get_next_process(int lock_index, int *high_prio){
         return best_reader;
     }
     else{
-        if((best_reader_wait - best_writer_wait)>600){
+        /*if((best_reader_wait - best_writer_wait)>600){
             *high_prio=-1;
             return best_writer;
-        }
+        }*/
         *high_prio= best_reader_priority;
         return best_reader;
     }
