@@ -42,11 +42,13 @@ int release(int pid, int lock_index){
         nextpid = get_next_process(lock_index, &max_w_prio);
         kprintf("exiting this\n");
         if(nextpid == -1){
+            kprintf("in none");
             ltable[lock_index].ltype = LNONE;
             return OK;
         }
 
         if(proctab[nextpid].locktype[lock_index] == READ){
+            kprintf("in read\n");
             int ctr = q[nextpid].qprev;
             dequeue(nextpid);
             ready(nextpid,RESCHNO);
@@ -68,6 +70,7 @@ int release(int pid, int lock_index){
         }
 
         else{
+            kprintf("in write\n");
             ltable[lock_index].ltype = WRITE;
             dequeue(nextpid);
             ready(nextpid,RESCHNO);
