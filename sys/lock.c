@@ -49,7 +49,7 @@ int lock(int lock_index, int lock_type, int priority) {
 			bool flag = FALSE;
 			temp = q[ltable[ldesc].lqtail].qprev;
 
-			for (temp = q[ltable[ldesc].lqtail].qprev; (temp != ltable[ldesc].lqhead) && (prio < q[temp].qkey); temp = q[temp].qprev) {
+			for (temp = q[ltable[ldesc].lqtail].qprev; (temp != ltable[ldesc].lqhead) && (priority < q[temp].qkey); temp = q[temp].qprev) {
 				if (proctab[temp].locktype[ldesc] == WRITE) {
 					flag = TRUE;
 					break;
