@@ -1,14 +1,15 @@
 #define NLOCKS 50
-#define	LAVAILABLE	1		/* this lock is available */
+#define	LAVAILABLE 1		/* this lock is available */
 
 /* Constants for lock type */
-#define READ   '\01'       /* locked by a reader */
-#define WRITE  '\02'		/* locked by a writer */
-#define LNONE	'\03' 		/* locked by no process */
+#define LNONE 0
+#define READ 1  
+#define WRITE 2
+
 
 struct lentry{
 	char lstate;
-	char ltype;  
+	int ltype;  
 	int nreaders;
 	int lqhead;  
 	int lqtail;  
