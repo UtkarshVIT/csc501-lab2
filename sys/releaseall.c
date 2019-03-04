@@ -5,7 +5,6 @@
 #include <sem.h>
 #include <stdio.h>
 #include "lock.h"
-#include <limits.h>
 #include <sleep.h>
 
 int release(int pid, int ldes);
@@ -82,11 +81,11 @@ int get_next_process(int lock_index, int &high_prio){
     int ctr = q[ltable[lock_index].lqtail].qprev;
     int best_reader;
     int best_reader_priority = -1;
-    unsigned long best_reader_wait=-1;
+    unsigned long best_reader_wait = 18446744073709551615;
     
     int best_writer;
     int best_writer_priority = -1;
-    unsigned long best_writer_wait=ULONG_MAX;    
+    unsigned long best_writer_wait = 18446744073709551615;    
     
     while(ctr != ltable[lock_index].lqhead){
         if(proctab[ctr].locktype[lock_index] == WRITE){
