@@ -7,8 +7,8 @@ struct lentry ltable[NLOCKS];
 void linit()
 {
 	int i=0, j;
-	while (i<NLOCKS) {
-		ltable[i].ltype = LNONE;
+	while(i<NLOCKS){
+		ltable[i].ltype = FREE;
 		ltable[i].lstate = LAVAILABLE;
 		ltable[i].nreaders = 0;
 		ltable[i].lqhead = newqueue();
@@ -16,7 +16,7 @@ void linit()
 		j=0;
 		while(j<NPROC)
 		{
-			ltable[i].holders[j] = LNONE;
+			//ltable[i].holders[j] = -1;
 			++j;
 		}
 		++i;

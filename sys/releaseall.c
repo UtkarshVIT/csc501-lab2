@@ -61,7 +61,7 @@ int release(int pid, int lock_index){
     int nextpid = 0, max_w_prio = 0;
 
     proctab[pid].locktype[lock_index] = LNONE;
-    ltable[lock_index].holders[pid] = LNONE;
+    //ltable[lock_index].holders[pid] = LNONE;
 
     if(ltable[lock_index].ltype == READ)
         if(--ltable[lock_index].nreaders)
@@ -80,7 +80,7 @@ int release(int pid, int lock_index){
             int ctr = q[nextpid].qprev;
             dequeue(nextpid);
             ready(nextpid,RESCHNO);
-            ltable[lock_index].holders[nextpid] = READ;
+            //ltable[lock_index].holders[nextpid] = READ;
             ltable[lock_index].nreaders++;
             ltable[lock_index].ltype = READ;
 
@@ -90,7 +90,7 @@ int release(int pid, int lock_index){
                     ltable[lock_index].nreaders++;
                     dequeue(ctr);
                     ready(ctr,RESCHNO);
-                    ltable[lock_index].holders[ctr] = READ;
+                    //ltable[lock_index].holders[ctr] = READ;
                     ctr=q[ctr].qprev;
                 }
                 else{
@@ -104,7 +104,7 @@ int release(int pid, int lock_index){
             ltable[lock_index].ltype = WRITE;
             dequeue(nextpid);
             ready(nextpid,RESCHNO);
-            ltable[lock_index].holders[nextpid] = WRITE;
+            //ltable[lock_index].holders[nextpid] = WRITE;
         }
 
         return OK;

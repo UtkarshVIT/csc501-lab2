@@ -2,18 +2,18 @@
 #define	LAVAILABLE 1		/* this lock is available */
 
 /* Constants for lock type */
-#define LNONE 0
+#define FREE 0
 #define READ 1  
 #define WRITE 2
 
 
 struct lentry{
-	char lstate;
+	int lstate;
 	int ltype;  
 	int nreaders;
 	int lqhead;  
 	int lqtail;  
-	int holders[NPROC];
+	//int holders[NPROC];
 };
 
 extern struct lentry ltable[NLOCKS];

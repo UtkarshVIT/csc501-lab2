@@ -9,7 +9,7 @@ int lcreate() {
     while (i < NLOCKS) {
         if (ltable[i].lstate == DELETED || ltable[i].lstate == LAVAILABLE){
             ltable[i].lstate = LAVAILABLE;
-            ltable[i].ltype = LNONE;
+            ltable[i].ltype = FREE;
             restore(ps);
             return i;
         }

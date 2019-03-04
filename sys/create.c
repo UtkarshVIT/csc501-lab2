@@ -69,10 +69,10 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	pptr->pdevs[0] = pptr->pdevs[1] = pptr->ppagedev = BADDEV;
 
 	/*	 */
-	int ldes;
-	pptr->plreqtime = 0;
-	for(ldes = 0; ldes < NLOCKS; ldes++)
-		pptr->locktype[ldes] = LNONE;
+	int i;
+	proctab[pid].plreqtime = 0;
+	for(i = 0; i < NLOCKS; i++)
+		proctab[pid].locktype[i] = FREE;
 	/*	*/
 
 		/* Bottom of stack */
