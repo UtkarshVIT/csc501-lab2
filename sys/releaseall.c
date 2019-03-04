@@ -57,7 +57,6 @@ int release(int pid, int lock_index){
     int nextpid = 0;
 
     proctab[pid].locktype[lock_index] = FREE;
-    //ltable[lock_index].holders[pid] = FREE;
 
     if(ltable[lock_index].ltype == READ)
         if(--ltable[lock_index].reader_count)
