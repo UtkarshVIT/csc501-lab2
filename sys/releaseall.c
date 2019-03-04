@@ -80,8 +80,49 @@ int release(int pid, int lock_index){
         return OK;
     }
 
-    int get_next_process(int lock_index, int *high_prio){
+int get_next_process(int lock_index, int *high_prio){
+    int pid_1 = q[ltable[lock_index].lqtail].qprev;
+    int pid_2;
+    int timediff = 0,retVal = 0;
 
+    if(proctab[pid_1].locktype[lock_index] == WRITE){
+        retVal = pid_1;
+        high_prio = -1;
+    }
+
+    else{
+        pid_2 = q[pid_1].qprev;
+        if(q[pid_1].qkey > q[pid_2].qkey){
+            retVal = pid_1;
+            high_prio = -1;
+        }
+
+        else if((q[pid_1].qkey == q[pid_2].qkey)){
+            while((pid_2 != ltable[lock_index].lqhead) && (q[pid_1].qkey == q[pid_2].qkey)){
+                if(proctab[pid_2].locktype[lock_index] == READ)
+                    retVal = pid_1;
+                else{
+                    timediff = proctab[pid_2].plreqtime - proctab[pid_1].plreqtime;
+                    if(timediff <= 1000 && timediff >= -1000)
+                        retVal = pid_2;
+                    else
+                        retVal = pid_1;
+                    break;
+                }
+                pid_2 = q[pid_2].qprev;
+            }
+        }
+        pid_1 = q[ltable[lock_index].lqtail].qprev;
+        {
+            while(pid_1!=ltable[lock_index].lqhead && proctab[pid_1].locktype[lock_index]!=WRITE)
+                pid_1 = q[pid_1].qprev;
+            *high_prio = q[pid_1].qkey;
+        }
+    }
+    return retVal;
+
+
+/*
         int ctr = q[ltable[lock_index].lqtail].qprev;
         int best_reader;
         int best_reader_priority = -1;
@@ -113,11 +154,11 @@ int release(int pid, int lock_index){
             return best_reader;
         }
         else{
-        /*if((best_reader_wait - best_writer_wait)>600){
+        if((best_reader_wait - best_writer_wait)>600){
             *high_prio=-1;
             return best_writer;
-        }*/
+        }
             *high_prio= best_reader_priority;
             return best_reader;
+        }*/
         }
-    }
