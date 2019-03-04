@@ -12,8 +12,8 @@ void linit()
 		lock_list[i].lstate = LAVAILABLE;
 		lock_list[i].reader_count = 0;
 		lock_list[i].writer_count = 0;
-		lock_list[i].lqhead = newqueue();
-		lock_list[i].lqtail = 1 + lock_list[i].lqhead;
+		lock_list[i].lock_qhead = newqueue();
+		lock_list[i].lock_lqtail = 1 + lock_list[i].lock_qhead;
 		++i;
 	}
 }

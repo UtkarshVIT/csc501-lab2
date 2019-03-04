@@ -8,7 +8,7 @@ extern unsigned long ctr1000;
 int get_next_process(int lock_index){
 
     unsigned long curr_time = ctr1000;
-    int ctr = q[lock_list[lock_index].lqtail].qprev;
+    int ctr = q[lock_list[lock_index].lock_lqtail].qprev;
     int best_reader;
     int best_reader_priority = -1;
     unsigned long best_reader_time = curr_time;
@@ -17,12 +17,12 @@ int get_next_process(int lock_index){
     int best_writer_priority = -1;   
     unsigned long best_writer_time = curr_time;
 
-    if(ctr == lock_list[lock_index].lqhead)
+    if(ctr == lock_list[lock_index].lock_qhead)
     {
         return -1;
     }
 
-    while(ctr != lock_list[lock_index].lqhead){
+    while(ctr != lock_list[lock_index].lock_qhead){
         if(proctab[ctr].locktype[lock_index] == WRITE){
             if(best_writer_priority <= q[ctr].qkey && best_writer_time > proctab[ctr].plreqtime){
                 best_writer_priority = q[ctr].qkey;
@@ -81,7 +81,7 @@ int release(int pid, int lock_index){
         ready(nextpid,RESCHNO);
         lock_list[lock_index].reader_count++;
         lock_list[lock_index].ltype = READ;
-        while(ctr != lock_list[lock_index].lqhead){
+        while(ctr != lock_list[lock_index].lock_qhead){
             if(proctab[ctr].locktype[lock_index] == READ){
                 kprintf("unlocking\n");
                 lock_list[lock_index].reader_count++;

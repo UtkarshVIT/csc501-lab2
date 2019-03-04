@@ -9,7 +9,7 @@ void insert_in_prio_queue(int lock_index, int priority, int lock_type){
 	proctab[currpid].pstate = PRWAIT;
 	proctab[currpid].locktype[lock_index] = lock_type;
 	proctab[currpid].plreqtime = ctr1000;
-	insert(currpid, lock_list[lock_index].lqhead, priority);
+	insert(currpid, lock_list[lock_index].lock_qhead, priority);
 	resched();
 }
 
@@ -42,9 +42,9 @@ int lock(int lock_index, int lock_type, int priority){
 		/* If the request lock_type is READ */
 		else if(lock_type == READ){
 			int ctr, flag = 0;
-			ctr = q[lock_list[lock_index].lqtail].qprev;
+			ctr = q[lock_list[lock_index].lock_lqtail].qprev;
 
-			for (ctr = q[lock_list[lock_index].lqtail].qprev; (ctr != lock_list[lock_index].lqhead) && (priority < q[ctr].qkey); ctr = q[ctr].qprev) {
+			for (ctr = q[lock_list[lock_index].lock_lqtail].qprev; (ctr != lock_list[lock_index].lock_qhead) && (priority < q[ctr].qkey); ctr = q[ctr].qprev) {
 				if (proctab[ctr].locktype[lock_index] == WRITE) {
 					flag = 1;
 					break;

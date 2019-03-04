@@ -12,8 +12,8 @@ struct lock_data{
 	int ltype;  
 	int reader_count;
 	int writer_count;
-	int lqhead;  
-	int lqtail;
+	int lock_qhead;  
+	int lock_lqtail;
 };
 
 extern struct lock_data lock_list[NLOCKS];
