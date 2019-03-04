@@ -5,7 +5,7 @@
 
 extern unsigned long ctr1000;
 
-int get_next_process(int lock_index, int *high_prio){
+int get_next_process(int lock_index){
 
     unsigned long curr_time = ctr1000;
     int ctr = q[ltable[lock_index].lqtail].qprev;
@@ -40,25 +40,21 @@ int get_next_process(int lock_index, int *high_prio){
         ctr=q[ctr].qprev;
     }
     if(best_writer_priority>best_reader_priority){
-        *high_prio=-1;
         return best_writer;
     }
     else if(best_writer_priority<best_reader_priority){
-        *high_prio= best_reader_priority;
         return best_reader;
     }
     else{
         if(proctab[best_reader].plreqtime > proctab[best_writer].plreqtime){
-            *high_prio=-1;
             return best_writer;
         }
-        *high_prio= best_reader_priority;
         return best_reader;
     }
 }
 
 int release(int pid, int lock_index){
-    int nextpid = 0, max_w_prio = 0;
+    int nextpid = 0;
 
     proctab[pid].locktype[lock_index] = FREE;
     //ltable[lock_index].holders[pid] = FREE;
@@ -70,8 +66,8 @@ int release(int pid, int lock_index){
         --ltable[lock_index].writer_count;
 
     kprintf("entering this\n");
-    nextpid = get_next_process(lock_index, &max_w_prio);
-    kprintf("exiting this, returned: %d, %d\n", nextpid, max_w_prio);
+    nextpid = get_next_process(lock_index);
+    kprintf("exiting this, returned: %d\n", nextpid);
         
     if(nextpid == -1){
         kprintf("in none");
