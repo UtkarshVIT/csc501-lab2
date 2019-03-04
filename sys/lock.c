@@ -47,10 +47,10 @@ int lock(int lock_index, int lock_type, int priority) {
 		else if(lock_type == READ) {
 			int temp;
 			bool flag = FALSE;
-			temp = q[ltable[ldesc].lqtail].qprev;
+			temp = q[ltable[lock_index].lqtail].qprev;
 
-			for (temp = q[ltable[ldesc].lqtail].qprev; (temp != ltable[ldesc].lqhead) && (priority < q[temp].qkey); temp = q[temp].qprev) {
-				if (proctab[temp].locktype[ldesc] == WRITE) {
+			for (temp = q[ltable[lock_index].lqtail].qprev; (temp != ltable[lock_index].lqhead) && (priority < q[temp].qkey); temp = q[temp].qprev) {
+				if (proctab[temp].locktype[lock_index] == WRITE) {
 					flag = TRUE;
 					break;
 				}
