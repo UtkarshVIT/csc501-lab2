@@ -82,12 +82,16 @@ int release(int pid, int lock_index){
 
 int get_next_process(int lock_index, int *high_prio){
 
+    unsigned long curr_time = ctr1000;
     int ctr = q[ltable[lock_index].lqtail].qprev;
     int best_reader;
     int best_reader_priority = -1;
+    unsigned long best_reader_time = curr_time;
 
     int best_writer;
     int best_writer_priority = -1;   
+    unsigned long best_writer_time = curr_time;
+
     if(ctr == ltable[lock_index].lqhead)
     {
         return -1;
@@ -95,15 +99,17 @@ int get_next_process(int lock_index, int *high_prio){
 
     while(ctr != ltable[lock_index].lqhead){
         if(proctab[ctr].locktype[lock_index] == WRITE){
-            if(best_writer_priority <= q[ctr].qkey ){
+            if(best_writer_priority <= q[ctr].qkey && best_writer_time > proctab[ctr].plreqtime){
                 best_writer_priority = q[ctr].qkey;
                 best_writer = ctr;
+                best_writer_time = proctab[ctr].plreqtime;
             }
         }
         else{
-            if(best_reader_priority <= q[ctr].qkey){
+            if(best_reader_priority <= q[ctr].qkey && best_reader_time > proctab[ctr].plreqtime){
                 best_reader_priority = q[ctr].qkey;
                 best_reader = ctr;
+                best_reader_time = proctab[ctr].plreqtime;
             }
         }
         ctr=q[ctr].qprev;
