@@ -44,7 +44,7 @@ SYSCALL kill(int pid) {
 
 	case PRCURR:
 		for (i = 0; i < NLOCKS; i++) {
-			if (proctab[pid].locktype[i] != LNONE)
+			if (proctab[pid].locktype[i] != FREE)
 				release(pid,i);
 		}
 		pptr->pstate = PRFREE; /* suicide */
@@ -55,7 +55,7 @@ SYSCALL kill(int pid) {
 
 	case PRREADY:
 		for (i = 0; i < NLOCKS; i++) {
-			if (proctab[pid].locktype[i] != LNONE)
+			if (proctab[pid].locktype[i] != FREE)
 				release(pid,i);
 		}
 		dequeue(pid);
@@ -68,7 +68,7 @@ SYSCALL kill(int pid) {
 		/* fall through	*/
 	default:
 		for (i = 0; i < NLOCKS; i++) {
-			if (proctab[pid].locktype[i] != LNONE)
+			if (proctab[pid].locktype[i] != FREE)
 				release(pid,i);
 		}
 		pptr->pstate = PRFREE;

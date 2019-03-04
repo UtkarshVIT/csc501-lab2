@@ -60,8 +60,8 @@ int get_next_process(int lock_index, int *high_prio){
 int release(int pid, int lock_index){
     int nextpid = 0, max_w_prio = 0;
 
-    proctab[pid].locktype[lock_index] = LNONE;
-    //ltable[lock_index].holders[pid] = LNONE;
+    proctab[pid].locktype[lock_index] = FREE;
+    //ltable[lock_index].holders[pid] = FREE;
 
     if(ltable[lock_index].ltype == READ)
         if(--ltable[lock_index].nreaders)
@@ -71,7 +71,7 @@ int release(int pid, int lock_index){
         kprintf("exiting this, returned: %d, %d\n", nextpid, max_w_prio);
         if(nextpid == -1){
             kprintf("in none");
-            ltable[lock_index].ltype = LNONE;
+            ltable[lock_index].ltype = FREE;
             return OK;
         }
 

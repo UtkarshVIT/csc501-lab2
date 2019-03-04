@@ -18,8 +18,8 @@ int lock(int lock_index, int lock_type, int priority){
 	disable(ps);
 	kprintf("locking\n");
 
-	/* If the lock lock_type in LNONE */
-	if(ltable[lock_index].ltype == LNONE){
+	/* If the lock lock_type in FREE */
+	if(ltable[lock_index].ltype == FREE){
 		ltable[lock_index].ltype = lock_type;
 		proctab[currpid].locktype[lock_index] = lock_type;
 		//ltable[lock_index].holders[currpid] = lock_type;
