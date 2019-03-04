@@ -79,7 +79,7 @@ int release(int pid, int lock_index){
 
         return OK;
     }
-/*
+
 int get_next_process(int lock_index, int *high_prio){
 
     unsigned long curr_time = ctr1000;
@@ -130,7 +130,8 @@ int get_next_process(int lock_index, int *high_prio){
         *high_prio= best_reader_priority;
         return best_reader;
     }
-}*/
+}
+/*
 int get_next_process(int ldesc, int *high_prio)
 {
     if(q[ltable[ldesc].lqtail].qprev == ltable[ldesc].lqhead)
@@ -182,5 +183,5 @@ int get_next_process(int ldesc, int *high_prio)
     }
     return retVal;
 }
-
+*/
 
