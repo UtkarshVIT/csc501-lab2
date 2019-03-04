@@ -3,17 +3,17 @@
 #include <q.h>
 #include "lock.h"
 
-struct lentry ltable[NLOCKS];
+struct lock_data lock_list[NLOCKS];
 void linit()
 {
 	int i=0, j;
 	while(i<NLOCKS){
-		ltable[i].ltype = FREE;
-		ltable[i].lstate = LAVAILABLE;
-		ltable[i].reader_count = 0;
-		ltable[i].writer_count = 0;
-		ltable[i].lqhead = newqueue();
-		ltable[i].lqtail = 1 + ltable[i].lqhead;
+		lock_list[i].ltype = FREE;
+		lock_list[i].lstate = LAVAILABLE;
+		lock_list[i].reader_count = 0;
+		lock_list[i].writer_count = 0;
+		lock_list[i].lqhead = newqueue();
+		lock_list[i].lqtail = 1 + lock_list[i].lqhead;
 		++i;
 	}
 }

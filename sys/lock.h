@@ -7,7 +7,7 @@
 #define WRITE 2
 
 
-struct lentry{
+struct lock_data{
 	int lstate;
 	int ltype;  
 	int reader_count;
@@ -16,7 +16,7 @@ struct lentry{
 	int lqtail;
 };
 
-extern struct lentry ltable[NLOCKS];
+extern struct lock_data lock_list[NLOCKS];
 
 int lock (int ldes1, int type, int priority);
 void linit();

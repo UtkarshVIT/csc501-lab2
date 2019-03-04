@@ -7,9 +7,9 @@ int lcreate() {
     int ldes, i=0;
     disable(ps);
     while (i < NLOCKS) {
-        if (ltable[i].lstate == DELETED || ltable[i].lstate == LAVAILABLE){
-            ltable[i].lstate = LAVAILABLE;
-            ltable[i].ltype = FREE;
+        if (lock_list[i].lstate == DELETED || lock_list[i].lstate == LAVAILABLE){
+            lock_list[i].lstate = LAVAILABLE;
+            lock_list[i].ltype = FREE;
             restore(ps);
             return i;
         }

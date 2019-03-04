@@ -9,7 +9,7 @@ void insert_in_prio_queue(int lock_index, int priority, int lock_type){
 	proctab[currpid].pstate = PRWAIT;
 	proctab[currpid].locktype[lock_index] = lock_type;
 	proctab[currpid].plreqtime = ctr1000;
-	insert(currpid, ltable[lock_index].lqhead, priority);
+	insert(currpid, lock_list[lock_index].lqhead, priority);
 	resched();
 }
 
@@ -19,21 +19,21 @@ int lock(int lock_index, int lock_type, int priority){
 	kprintf("locking\n");
 
 	/* If the lock lock_type in FREE */
-	if(ltable[lock_index].ltype == FREE){
-		ltable[lock_index].ltype = lock_type;
+	if(lock_list[lock_index].ltype == FREE){
+		lock_list[lock_index].ltype = lock_type;
 		proctab[currpid].locktype[lock_index] = lock_type;
-		//ltable[lock_index].holders[currpid] = lock_type;
+		//lock_list[lock_index].holders[currpid] = lock_type;
 
 		if(lock_type == READ){
-			ltable[lock_index].reader_count++;
+			lock_list[lock_index].reader_count++;
 		}
 		else{
-			ltable[lock_index].writer_count++;
+			lock_list[lock_index].writer_count++;
 		}
 	}
 
 	/* If the lock lock_type for this already READ */
-	else if(ltable[lock_index].ltype == READ){
+	else if(lock_list[lock_index].ltype == READ){
 		
 		/* If the request lock_type is WRITE */
 		if (lock_type == WRITE)
@@ -42,9 +42,9 @@ int lock(int lock_index, int lock_type, int priority){
 		/* If the request lock_type is READ */
 		else if(lock_type == READ){
 			int ctr, flag = 0;
-			ctr = q[ltable[lock_index].lqtail].qprev;
+			ctr = q[lock_list[lock_index].lqtail].qprev;
 
-			for (ctr = q[ltable[lock_index].lqtail].qprev; (ctr != ltable[lock_index].lqhead) && (priority < q[ctr].qkey); ctr = q[ctr].qprev) {
+			for (ctr = q[lock_list[lock_index].lqtail].qprev; (ctr != lock_list[lock_index].lqhead) && (priority < q[ctr].qkey); ctr = q[ctr].qprev) {
 				if (proctab[ctr].locktype[lock_index] == WRITE) {
 					flag = 1;
 					break;
@@ -57,13 +57,13 @@ int lock(int lock_index, int lock_type, int priority){
 
 			else{
 				proctab[currpid].locktype[lock_index] = lock_type;
-				ltable[lock_index].reader_count += 1;
-				ltable[lock_index].ltype = lock_type;
+				lock_list[lock_index].reader_count += 1;
+				lock_list[lock_index].ltype = lock_type;
 			}
 		}
 	}
 
-	else if(ltable[lock_index].ltype == WRITE){
+	else if(lock_list[lock_index].ltype == WRITE){
 		insert_in_prio_queue(lock_index, priority, lock_type);
 	} 
 
