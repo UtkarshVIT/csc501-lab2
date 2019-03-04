@@ -31,7 +31,6 @@ int releaseall(int numlocks, int locks, ...)
 }
 
 int release(int pid, int lock_index){
-    int pid;
     int proceed = 1, nextpid = 0, max_w_prio = 0;
 
     proctab[pid].locktype[lock_index] = LNONE;
@@ -49,19 +48,19 @@ int release(int pid, int lock_index){
     }
     
     if(proctab[nextpid].locktype[lock_index] == READ){
-        pid = q[nextpid].qprev;
+        int ctr = q[nextpid].qprev;
         dequeue(nextpid);
         ready(nextpid,RESCHNO);
         ltable[lock_index].holders[nextpid] = READ;
         ltable[lock_index].nreaders++;
         ltable[lock_index].ltype = READ;
-        while(pid != ltable[lock_index].lqhead && q[pid].qkey >= max_w_prio){
-            if(proctab[pid].locktype[lock_index] == READ){
+        while(ctr != ltable[lock_index].lqhead && q[ctr].qkey >= max_w_prio){
+            if(proctab[ctr].locktype[lock_index] == READ){
                 ltable[lock_index].nreaders++;
-                dequeue(pid);
-                ready(pid,RESCHNO);
-                ltable[lock_index].holders[pid] = READ;
-                pid=q[pid].qprev;
+                dequeue(ctr);
+                ready(ctr,RESCHNO);
+                ltable[lock_index].holders[ctr] = READ;
+                ctr=q[ctr].qprev;
             }
             else
                 break;
