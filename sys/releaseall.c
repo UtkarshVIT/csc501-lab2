@@ -117,10 +117,10 @@ int get_next_process(int lock_index, int *high_prio){
         return best_reader;
     }
     else{
-        /*if((best_reader_wait - best_writer_wait)>600){
+        if((proctab[best_reader].plreqtime - proctab[best_writer].plreqtime)>600){
             *high_prio=-1;
             return best_writer;
-        }*/
+        }
         *high_prio= best_reader_priority;
         return best_reader;
     }
