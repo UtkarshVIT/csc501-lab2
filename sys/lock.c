@@ -16,7 +16,7 @@ void insert_in_prio_queue(int lock_index, int priority, int lock_type){
 int lock(int lock_index, int lock_type, int priority){
 	STATWORD ps;
 	disable(ps);
-
+	kprintf("locking\n");
 	proctab[currpid].plwaitret = OK;
 
 	/* If the lock lock_type in LNONE */
