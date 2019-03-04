@@ -8,8 +8,7 @@
 
 
 struct lock_data{
-	int lstate;
-	int ltype;  
+	int ltype;		// check has been acquired by which type
 	int reader_count;
 	int writer_count;
 	int lock_qhead;  
