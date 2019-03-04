@@ -8,7 +8,7 @@ void linit()
 {
 	int i=0, j;
 	while(i<NLOCKS){
-		lock_list[i].ltype = FREE;
+		lock_list[i].lock_type = FREE;
 		lock_list[i].reader_count = 0;
 		lock_list[i].writer_count = 0;
 		lock_list[i].lock_qhead = newqueue();

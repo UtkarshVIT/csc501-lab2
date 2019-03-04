@@ -1,5 +1,4 @@
 #define NLOCKS 50
-#define	LAVAILABLE 1		/* this lock is available */
 
 /* Constants for lock type */
 #define FREE 0
@@ -8,7 +7,7 @@
 
 
 struct lock_data{
-	int ltype;		// check has been acquired by which type
+	int lock_type;		// check state of the lock
 	int reader_count;
 	int writer_count;
 	int lock_qhead;  

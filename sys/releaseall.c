@@ -58,7 +58,7 @@ int release(int pid, int lock_index){
 
     proctab[pid].locktype[lock_index] = FREE;
 
-    if(lock_list[lock_index].ltype == READ)
+    if(lock_list[lock_index].lock_type == READ)
         if(--lock_list[lock_index].reader_count)
             return OK;
     else
@@ -70,7 +70,7 @@ int release(int pid, int lock_index){
         
     if(nextpid == -1){
         kprintf("in none");
-        lock_list[lock_index].ltype = FREE;
+        lock_list[lock_index].lock_type = FREE;
         return OK;
     }
 
@@ -80,7 +80,7 @@ int release(int pid, int lock_index){
         dequeue(nextpid);
         ready(nextpid,RESCHNO);
         lock_list[lock_index].reader_count++;
-        lock_list[lock_index].ltype = READ;
+        lock_list[lock_index].lock_type = READ;
         while(ctr != lock_list[lock_index].lock_qhead){
             if(proctab[ctr].locktype[lock_index] == READ){
                 kprintf("unlocking\n");
@@ -97,7 +97,7 @@ int release(int pid, int lock_index){
 
     else{
         kprintf("in write\n");
-        lock_list[lock_index].ltype = WRITE;
+        lock_list[lock_index].lock_type = WRITE;
         lock_list[lock_index].writer_count++;
         dequeue(nextpid);
         ready(nextpid,RESCHNO);
