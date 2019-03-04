@@ -106,6 +106,7 @@ int get_next_process(int lock_index, int *high_prio){
                 best_reader = ctr;
             }
         }
+        ctr=q[ctr].qprev;
     }
     if(best_writer_priority>best_reader_priority){
         *high_prio=-1;
