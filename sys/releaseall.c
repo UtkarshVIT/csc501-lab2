@@ -30,7 +30,7 @@ int releaseall(int numlocks, int locks, ...)
 }
 
 int release(int pid, int lock_index){
-    int proceed = 1, nextpid = 0, max_w_prio = 0;
+    int nextpid = 0, max_w_prio = 0;
 
     proctab[pid].locktype[lock_index] = LNONE;
     ltable[lock_index].holders[pid] = LNONE;
@@ -39,7 +39,7 @@ int release(int pid, int lock_index){
         if(--ltable[lock_index].nreaders)
             return OK;
         
-    nextpid = get_next_process(lock_index, max_w_prio);
+    nextpid = get_next_process(lock_index, &max_w_prio);
     
     if(nextpid == -1){
         ltable[lock_index].ltype = LNONE;
@@ -76,16 +76,16 @@ int release(int pid, int lock_index){
     return OK;
 }
 
-int get_next_process(int lock_index, int &high_prio){
+int get_next_process(int lock_index, int *high_prio){
     
     int ctr = q[ltable[lock_index].lqtail].qprev;
     int best_reader;
     int best_reader_priority = -1;
-    unsigned long best_reader_wait = 18446744073709551615;
+    unsigned long best_reader_wait = 184467440737095;
     
     int best_writer;
     int best_writer_priority = -1;
-    unsigned long best_writer_wait = 18446744073709551615;    
+    unsigned long best_writer_wait = 184467440737095;    
     
     while(ctr != ltable[lock_index].lqhead){
         if(proctab[ctr].locktype[lock_index] == WRITE){
@@ -102,19 +102,19 @@ int get_next_process(int lock_index, int &high_prio){
         }
     }
     if(best_writer_priority>best_reader_priority){
-        high_prio=-1;
+        *high_prio=-1;
         return best_writer;
     }
     else if(best_writer_priority<best_reader_priority){
-        high_prio= best_reader_priority;
+        *high_prio= best_reader_priority;
         return best_reader;
     }
     else{
         if((best_reader_wait - best_writer_wait)>600){
-            high_prio=-1;
+            *high_prio=-1;
             return best_writer;
         }
-        high_prio= best_reader_priority;
+        *high_prio= best_reader_priority;
         return best_reader;
     }
 }
