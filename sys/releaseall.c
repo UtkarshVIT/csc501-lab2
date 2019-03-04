@@ -9,7 +9,6 @@
 
 int release(int pid, int ldes);
 int get_next_process(int ldesc, int *high_prio);
-void remote_readers(int ldesc, int pid_, int high_prio);
 
 int releaseall(int numlocks, int locks, ...)
 {
@@ -40,7 +39,7 @@ int release(int pid, int lock_index){
         if(--ltable[lock_index].nreaders)
             return OK;
         
-    nextpid = get_next_process(lock_index, &max_w_prio);
+    nextpid = get_next_process(lock_index, max_w_prio);
     
     if(nextpid == -1){
         ltable[lock_index].ltype = LNONE;
@@ -77,29 +76,26 @@ int release(int pid, int lock_index){
     return OK;
 }
 
-int get_next_process(int ldesc, int *high_prio){
-    if(q[ltable[ldesc].lqtail].qprev == ltable[ldesc].lqhead)
-        return SYSERR;
-
-    int pid_1 = q[ltable[ldesc].lqtail].qprev;
+int get_next_process(int lock_index, int &high_prio){
+    int pid_1 = q[ltable[lock_index].lqtail].qprev;
     int pid_2;
     int timediff = 0,retVal = 0;
 
-    if(proctab[pid_1].locktype[ldesc] == WRITE){
+    if(proctab[pid_1].locktype[lock_index] == WRITE){
         retVal = pid_1;
-        *high_prio = -1;
+        high_prio = -1;
     }
 
     else{
         pid_2 = q[pid_1].qprev;
         if(q[pid_1].qkey > q[pid_2].qkey){
             retVal = pid_1;
-            *high_prio = -1;
+            high_prio = -1;
         }
 
         else if((q[pid_1].qkey == q[pid_2].qkey)){
-            while((pid_2 != ltable[ldesc].lqhead) && (q[pid_1].qkey == q[pid_2].qkey)){
-                if(proctab[pid_2].locktype[ldesc] == READ)
+            while((pid_2 != ltable[lock_index].lqhead) && (q[pid_1].qkey == q[pid_2].qkey)){
+                if(proctab[pid_2].locktype[lock_index] == READ)
                     retVal = pid_1;
                 else{
                     timediff = proctab[pid_2].plreqtime - proctab[pid_1].plreqtime;
@@ -112,9 +108,9 @@ int get_next_process(int ldesc, int *high_prio){
                 pid_2 = q[pid_2].qprev;
             }
         }
-        pid_1 = q[ltable[ldesc].lqtail].qprev;
+        pid_1 = q[ltable[lock_index].lqtail].qprev;
         {
-            while(pid_1!=ltable[ldesc].lqhead && proctab[pid_1].locktype[ldesc]!=WRITE)
+            while(pid_1!=ltable[lock_index].lqhead && proctab[pid_1].locktype[lock_index]!=WRITE)
                 pid_1 = q[pid_1].qprev;
             *high_prio = q[pid_1].qkey;
         }
