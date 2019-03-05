@@ -5,6 +5,23 @@
 
 extern unsigned long ctr1000;
 
+void get_virtual_prio_prio_inversion(int pid){
+	int i=0;
+	int max_prio = proctab[i].pprio;
+	while(i<NLOCKS){
+		if(proctab[pid].locktype[i] == READ || proctab[pid].locktype[i] == WRITE){
+			int ctr = q[lock_list[i].lock_lqtail].qprev;
+			while(ctr != lock_list[i].lock_qhead){
+				if(proctab[ctr].pprio > max_prio)
+					max_prio = proctab[ctr].pprio;
+				ctr=q[ctr].qprev;
+			}
+		}
+		++i;
+	}
+	return max_prio;
+}
+
 void insert_in_prio_queue(int lock_index, int priority, int lock_type){
 	proctab[currpid].locktype[lock_index] = lock_type;
 	proctab[currpid].pstate = PRWAIT;	

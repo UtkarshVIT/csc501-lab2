@@ -187,8 +187,8 @@ int main( )
 {
 	linit();
     kprintf("in main funx\n");
-	//test1();
-	//test2();
+	test1();
+	test2();
 	test3();
 
         /* The hook to shutdown QEMU for process-like execution of XINU.
