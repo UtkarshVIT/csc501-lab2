@@ -202,7 +202,7 @@ void random4(char *msg, int lck){
         kprintf ("starting %s\n", msg);
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
-        kprintf("\n")
+        kprintf("\n");
         sleep(3);
         i=0;
         for(i=0;i<100;i++)
