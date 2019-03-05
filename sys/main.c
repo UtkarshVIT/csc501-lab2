@@ -222,9 +222,9 @@ void random4(char *msg, int lck){
 void testSem(){
     int semap = screate(1);
     int sem1, sem2, sem3;
-    sem1 = create(semaphore1,2000,25,"A",1,semap);
-    sem2 = create(semaphore2,2000,30,"B",1,semap);
-    sem3 = create(semaphore3,2000,35,"C",1,semap);
+    sem1 = create(semaphoreProc4, 2000, 25, "A", 1, semap);
+    sem2 = create(random4, 2000, 30, "B", 1, semap);
+    sem3 = create(semaphoreProc4, 2000, 35, "C", 1, semap);
 
     resume(sem1);
     resume(sem2);
