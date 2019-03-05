@@ -48,7 +48,7 @@ void test1 ()
 	resume(pid2);
 	
 	sleep (5);
-	//ldelete (lck);
+	ldelete (lck);
 	kprintf ("Test 1 ok\n");
 }
 
