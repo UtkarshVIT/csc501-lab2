@@ -3,8 +3,6 @@
 #include <q.h>
 #include "lock.h"
 
-extern unsigned long ctr1000;
-
 int get_next_process(int lock_index){
 
     unsigned long curr_time = ctr1000;
