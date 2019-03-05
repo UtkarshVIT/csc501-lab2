@@ -103,11 +103,12 @@ int release(int pid, int lock_index){
 
     else{
         lock_list[lock_index].lock_type = WRITE;
-        kprintf("this is now ready");
+        kprintf("this is now ready\n");
         lock_list[lock_index].writer_count++;
         dequeue(nextpid);
+        kpritnf("new we dequed\n");
         ready(nextpid,RESCHNO);
-        kprintf("put it in ready queue");
+        kprintf("put it in ready queue\n");
     }
     if(proctab[pid].gotDeleted)
         return DELETED;
