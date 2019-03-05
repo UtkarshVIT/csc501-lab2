@@ -30,6 +30,7 @@ SYSCALL getprio(int pid)
 			while(ctr != lock_list[i].lock_qhead){
 				if(proctab[ctr].pprio > max_prio)
 					max_prio = proctab[ctr].pprio;
+				ctr=q[ctr].qprev;
 			}
 		}
 		++i;
