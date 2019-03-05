@@ -18,9 +18,15 @@ void release_all_locks_for_process(int pid){
 	int i = 0 ;
 	while(i < NLOCKS) {
 		if (proctab[pid].locktype[i] != FREE){
+			kprintf("\n");
+			int ctr = q[lock_list[i].lock_lqtail].qprev;
+			while(ctr != lock_list[i].lock_qhead){
+				kprintf("%d ", proctab[ctr].pprio);
+				ctr=q[ctr].qprev;
+			}
 			kprintf("\nRemoving lock\n");
 			release(pid, i);
-			int ctr = q[lock_list[i].lock_lqtail].qprev;
+			ctr = q[lock_list[i].lock_lqtail].qprev;
 			while(ctr != lock_list[i].lock_qhead){
 				kprintf("%d ", proctab[ctr].pprio);
 				ctr=q[ctr].qprev;
