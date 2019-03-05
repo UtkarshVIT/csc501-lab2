@@ -188,7 +188,6 @@ void test3 ()
 /*----------------------------------Test 4---------------------------*/
 
 void writer4(char *msg, int lck){
-        kprintf("A\n");
         kprintf ("  %s: to acquire lock\n", msg);
         lock(lck, WRITE, 20);
         kprintf ("  %s: acquired lock, sleep 1s\n", msg);
