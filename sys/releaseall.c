@@ -40,15 +40,19 @@ int get_next_process(int lock_index){
         ctr=q[ctr].qprev;
     }
     if(best_writer_priority>best_reader_priority){
+        kprintf("here1 %d, \n",best_writer);
         return best_writer;
     }
     else if(best_writer_priority<best_reader_priority){
+        kprintf("here2 %d, \n",best_reader);
         return best_reader;
     }
     else{
         if(proctab[best_reader].plreqtime[lock_index] > proctab[best_writer].plreqtime[lock_index]){
+            kprintf("here3 %d, \n",best_writer);
             return best_writer;
         }
+        kprintf("here4 %d, \n",best_reader);
         return best_reader;
     }
 }
