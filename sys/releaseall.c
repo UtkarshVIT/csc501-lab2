@@ -30,7 +30,7 @@ int get_next_process(int lock_index){
                 best_writer_time = proctab[ctr].plreqtime[lock_index];
             }
         }
-        else{
+        else if(proctab[ctr].locktype[lock_index] == READ){
             if(best_reader_priority <= q[ctr].qkey && best_reader_time > proctab[ctr].plreqtime[lock_index]){
                 best_reader_priority = q[ctr].qkey;
                 best_reader = ctr;
