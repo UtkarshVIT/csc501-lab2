@@ -56,7 +56,7 @@ int get_next_process(int lock_index){
 int release(int pid, int lock_index){
     int nextpid = 0;
 
-    if(lock_index<0 || lock_index>49 || lock_list[lock_index].lock_type == DELETED || !(proctab[pid].locktype[i] == READ || proctab[pid].locktype[i] == WRITE) ||proctab[pid].locktype[lock_index] == FREE)
+    if(lock_index<0 || lock_index>49 || lock_list[lock_index].lock_type == DELETED || !(proctab[pid].locktype[lock_index] == READ || proctab[pid].locktype[lock_index] == WRITE) ||proctab[pid].locktype[lock_index] == FREE)
     {
         return SYSERR;
     }
