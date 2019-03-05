@@ -23,7 +23,7 @@ int get_next_process(int lock_index){
     }
     kprintf("\n");
     while(ctr != lock_list[lock_index].lock_qhead){
-        kprintf("%d, ", ctr);
+        kprintf("%d, %d", ctr, q[ctr].qkey);
         if(proctab[ctr].locktype[lock_index] == WRITE){
             kprintf("yoyoyo");
             if(best_writer_priority <= q[ctr].qkey && best_writer_time > proctab[ctr].plreqtime[lock_index]){
