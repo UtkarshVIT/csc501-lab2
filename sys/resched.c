@@ -22,7 +22,6 @@ int resched()
 
 	/* no switch needed if current process priority higher than next*/
 	register struct	pentry	*ctr = getlast(rdytail);
-	while(ctr!=)
 
 	int virtual_prio = get_virtual_prio(currpid);
 	kprintf("-->%d\n",virtual_prio);
