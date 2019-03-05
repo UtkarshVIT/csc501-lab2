@@ -61,6 +61,7 @@ struct	pentry	{
 	int	pwaitret;
 	unsigned int plreqtime;
 	int locktype[50];
+	int gotDeleted;
 };
 
 
