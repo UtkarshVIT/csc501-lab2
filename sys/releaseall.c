@@ -69,18 +69,14 @@ int release(int pid, int lock_index){
     else
         --lock_list[lock_index].writer_count;
 
-    kprintf("entering this\n");
     nextpid = get_next_process(lock_index);
-    kprintf("exiting this, returned: %d\n", nextpid);
         
     if(nextpid == -1){
-        kprintf("in none");
         lock_list[lock_index].lock_type = FREE;
         return OK;
     }
 
     if(proctab[nextpid].locktype[lock_index] == READ){
-        kprintf("in read\n");
         int ctr = q[nextpid].qprev;
         dequeue(nextpid);
         ready(nextpid,RESCHNO);
@@ -88,7 +84,6 @@ int release(int pid, int lock_index){
         lock_list[lock_index].lock_type = READ;
         while(ctr != lock_list[lock_index].lock_qhead){
             if(proctab[ctr].locktype[lock_index] == READ){
-                kprintf("unlocking\n");
                 lock_list[lock_index].reader_count++;
                 dequeue(ctr);
                 ready(ctr,RESCHNO);
@@ -101,7 +96,6 @@ int release(int pid, int lock_index){
     }
 
     else{
-        kprintf("in write\n");
         lock_list[lock_index].lock_type = WRITE;
         lock_list[lock_index].writer_count++;
         dequeue(nextpid);
