@@ -284,7 +284,7 @@ int main( )
 	//test1();
 	//test2();
 	//stest3();
-    testCustomLocks();
+    //testCustomLocks();
 
         /* The hook to shutdown QEMU for process-like execution of XINU.
          * This API call exists the QEMU process.
