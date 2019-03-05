@@ -13,7 +13,7 @@
  */
 int get_virtual_prio(int pid){
 	int i=0;
-	int max_prio = pptr->pprio;
+	int max_prio = proctab[pid].pprio;
 	while(i<NLOCKS){
 		if(proctab[pid].locktype[i] == READ || proctab[pid].locktype[i] == WRITE){
 			int ctr = q[lock_list[i].lock_lqtail].qprev;
