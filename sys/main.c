@@ -186,42 +186,17 @@ void test3 ()
 
 
 /*----------------------------------Test 4---------------------------*/
-/*
-void reader4 (char *msg, int lck)
-{
-        int     ret;
 
-        kprintf ("  %s: to acquire lock\n", msg);
-        lock (lck, READ, DEFAULT_LOCK_PRIO);
-        int i=0;
-        for(i=0;i<1000;i++)
-            kprintf("%s", msg);
-        kprintf ("acquired lock", msg);
-        releaseall (1, lck);
-}
-
-void writer4 (char *msg, int lck)
-{
-        kprintf ("  %s: to acquire lock\n", msg);
-        lock (lck, WRITE, DEFAULT_LOCK_PRIO);
-        kprintf ("  %s: acquired lock\n", msg);
-        int i=0;
-        for(i=0;i<1000;i++)
-            kprintf("%s", msg);
-        kprintf ("  %s: to release lock\n", msg);
-        releaseall (1, lck);
-}
-*/
-void lock1(int l1){
+void writer4(char*msg, int lck){
         kprintf("A\n");
-        int x = lock(l1,WRITE,20);
-        kprintf("A: Lock acquired.\n");
+        lock(l1, WRITE, 20);
+        kprintf("%s: Lock acquired.\n", msg);
         sleep(1);
-        kprintf("A: Releasing lock.\n");
+        kprintf("%s: Releasing lock.\n", msg);
         releaseall(1,l1);
 }
 
-void lock2(int l2){
+void random4(int lck){
         int i=0;
         while(i++<50)
                 kprintf("B");
@@ -233,29 +208,20 @@ void lock2(int l2){
         kprintf("B\n");
 }
 
-void lock3(int l3){
-        kprintf("C\n");
-        int x = lock(l3,WRITE,20);
-        kprintf("C: Lock acquired\n");
-        sleep(1);
-        kprintf("C: Releasing lock\n");
-        releaseall(1,l3);
-}
-
 void testCustomLocks(){
-    int lock_test = lcreate();
-        int lck1 = create(lock1,2000,25,"A",1,lock_test);
-        int lck2 = create(lock2,2000,30,"B",1,lock_test);
-        int lck3 = create(lock3,2000,35,"C",1,lock_test);
-        kprintf("Starting A.\n");
-        resume(lck1);
-        kprintf("Starting B.\n");
-        resume(lck2);
-        sleep(1);
-        kprintf("Starting C.\n");
-        resume(lck3);
+    int lock = lcreate();
 
+    int writer1 = create(writer4, 2000, 25, "A", 1, "A",lock);
+    int random1 = create(random4, 2000, 30, "B", 1, lock);
+    int writer2 = create(writer4, 2000, 35, "C", 1, "C",lock);
 
+    kprintf("Starting A.\n");
+    resume(writer1);
+    kprintf("Starting B.\n");
+    resume(random1);
+    sleep(1);
+    kprintf("Starting C.\n");
+    resume(writer2);
 
     //assert (getprio(wr1) == 25, "Test 3 failed"
     kprintf("done\n");
