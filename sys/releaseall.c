@@ -23,19 +23,19 @@ int get_next_process(int lock_index){
     }
     kprintf("\n");
     while(ctr != lock_list[lock_index].lock_qhead){
-        kprintf("%d, %d", ctr, q[ctr].qkey);
+        //kprintf("%d, %d", ctr, q[ctr].qkey);
         if(proctab[ctr].locktype[lock_index] == WRITE){
-            kprintf("yoyoyo");
-            kprintf("%lu, %lu", best_writer_time, proctab[ctr].plreqtime[lock_index]);
+            //kprintf("yoyoyo");
+            //kprintf("%lu, %lu", best_writer_time, proctab[ctr].plreqtime[lock_index]);
             if(best_writer_priority <= q[ctr].qkey && best_writer_time >= proctab[ctr].plreqtime[lock_index]){
-                kprintf("wwww");
+                //kprintf("wwww");
                 best_writer_priority = q[ctr].qkey;
                 best_writer = ctr;
                 best_writer_time = proctab[ctr].plreqtime[lock_index];
             }
         }
         else if(proctab[ctr].locktype[lock_index] == READ){
-            kprintf("yasas");
+            //kprintf("yasas");
             if(best_reader_priority <= q[ctr].qkey && best_reader_time >= proctab[ctr].plreqtime[lock_index]){
                 best_reader_priority = q[ctr].qkey;
                 best_reader = ctr;
@@ -44,23 +44,23 @@ int get_next_process(int lock_index){
         }
         ctr=q[ctr].qprev;
     }
-    kprintf("-->%d, %d\n", best_reader_priority, best_writer_priority);
-    kprintf("==>%d, %d\n", best_reader, best_writer);
+    //kprintf("-->%d, %d\n", best_reader_priority, best_writer_priority);
+    //kprintf("==>%d, %d\n", best_reader, best_writer);
     if(best_writer_priority>best_reader_priority){
-        kprintf("here1 %d, \n",best_writer);
+        //kprintf("here1 %d, \n",best_writer);
         return best_writer;
     }
 
     else if(best_writer_priority<best_reader_priority){
-        kprintf("here2 %d, \n",best_reader);
+        //kprintf("here2 %d, \n",best_reader);
         return best_reader;
     }
     else{
         if(proctab[best_reader].plreqtime[lock_index] > proctab[best_writer].plreqtime[lock_index]){
-            kprintf("here3 %d, \n",best_writer);
+            //kprintf("here3 %d, \n",best_writer);
             return best_writer;
         }
-        kprintf("here4 %d, \n",best_reader);
+        //kprintf("here4 %d, \n",best_reader);
         return best_reader;
     }
 }
@@ -82,7 +82,7 @@ int release(int pid, int lock_index){
         --lock_list[lock_index].writer_count;
 
     if(proctab[pid].pstate != PRCURR && proctab[pid].pstate != PRREADY && pid != currpid){
-        kprintf("in here\n");
+        //kprintf("in here\n");
         dequeue(pid);
         return OK;
     }
@@ -115,12 +115,12 @@ int release(int pid, int lock_index){
 
     else{
         lock_list[lock_index].lock_type = WRITE;
-        kprintf("this is now ready\n");
+        //kprintf("this is now ready\n");
         lock_list[lock_index].writer_count++;
         dequeue(nextpid);
-        kprintf("new we dequed %d\n", nextpid);
+        //kprintf("new we dequed %d\n", nextpid);
         ready(nextpid,RESCHNO);
-        kprintf("put it in ready queue\n");
+        //kprintf("put it in ready queue\n");
     }
     if(proctab[pid].gotDeleted)
         return DELETED;
