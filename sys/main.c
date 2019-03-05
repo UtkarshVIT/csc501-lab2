@@ -235,29 +235,30 @@ void random4(char *msg, int lck){
 void testSem(){
     int semap = screate(1);
     int sem1, sem2, sem3;
-    sem1 = create(semaphoreProc4, 2000, 25, "A", 2, "S1", semap);
-    sem2 = create(randomSemProc4, 2000, 30, "B", 2, "R1", semap);
-    sem3 = create(semaphoreProc4, 2000, 35, "C", 2, "S2", semap);
+    sem1 = create(semaphoreProc4, 2000, 25, "sem1", 2, "S1", semap);
+    sem2 = create(randomSemProc4, 2000, 30, "sem2", 2, "R1", semap);
+    sem3 = create(semaphoreProc4, 2000, 35, "sem3", 2, "S2", semap);
 
     resume(sem1);
     resume(sem2);
     sleep(1);
     resume(sem3);
-    sleep(10);
+    
 }
 
 void testCustomLocks(){
     int lock = lcreate();
     int writer1, random1, writer2;
 
-    writer1 = create(writer4, 2000, 20, "A", 2, "W1", lock);
-    random1 = create(random4, 2000, 25, "B", 1, "R1", lock);
-    writer2 = create(writer4, 2000, 30, "C", 2, "W2", lock);
+    writer1 = create(writer4, 2000, 20, "writer1", 2, "W1", lock);
+    random1 = create(random4, 2000, 25, "random1", 1, "R1", lock);
+    writer2 = create(writer4, 2000, 30, "writer2", 2, "W2", lock);
 
     resume(writer1);
     resume(random1);
     sleep(1);
     resume(writer2);
+    sleep(10);
 }
 int main( )
 {
