@@ -185,7 +185,6 @@ void test3 ()
 }
 int main( )
 {
-	linit();
     kprintf("in main funx\n");
 	test1();
 	test2();

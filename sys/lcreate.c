@@ -11,6 +11,8 @@ int lcreate(){
             lock_list[i].lock_type = FREE;
             restore(ps);
             return i;
-        }++i;
+        }
+        ++i;
     }
+    return SYSERR;
 }

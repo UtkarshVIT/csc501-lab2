@@ -93,11 +93,11 @@ int release(int pid, int lock_index){
                 lock_list[lock_index].reader_count++;
                 dequeue(ctr);
                 ready(ctr,RESCHNO);
-                    ctr=q[ctr].qprev;
             }
             else{
                 break;
             }
+            ctr=q[ctr].qprev;
         }
     }
 
@@ -112,8 +112,7 @@ int release(int pid, int lock_index){
     return OK;
 }
 
-int releaseall(int numlocks, int locks, ...)
-{
+int releaseall(int numlocks, int locks, ...){
     STATWORD ps;
     int ret, flag=0;
     int lock_index;

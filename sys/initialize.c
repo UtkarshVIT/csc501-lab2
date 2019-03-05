@@ -177,7 +177,7 @@ LOCAL int sysinit()
 		sptr->sqtail = 1 + (sptr->sqhead = newqueue());
 	}
 
-
+	linit();
 	rdytail = 1 + (rdyhead=newqueue());/* initialize ready list */
 
 
