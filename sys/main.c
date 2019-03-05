@@ -261,12 +261,14 @@ void testCustomLocks(){
 }
 int main( )
 {
-    kprintf("in main funx\n");
 	//test1();
 	//test2();
 	//stest3();
-    testSem();
+
+    kprintf("\n-----------------using custom locks-------------------\n");
     testCustomLocks();
+    kprintf("\n-----------------using Xinu sem-------------------\n");
+    testSem();
 
         /* The hook to shutdown QEMU for process-like execution of XINU.
          * This API call exists the QEMU process.
