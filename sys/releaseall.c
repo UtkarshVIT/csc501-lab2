@@ -26,6 +26,7 @@ int get_next_process(int lock_index){
         kprintf("%d, %d", ctr, q[ctr].qkey);
         if(proctab[ctr].locktype[lock_index] == WRITE){
             kprintf("yoyoyo");
+            kprintf("%lu, %lu", best_writer_time, proctab[ctr].plreqtime[lock_index]);
             if(best_writer_priority <= q[ctr].qkey && best_writer_time > proctab[ctr].plreqtime[lock_index]){
                 kprintf("wwww");
                 best_writer_priority = q[ctr].qkey;
