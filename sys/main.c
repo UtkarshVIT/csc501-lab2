@@ -242,7 +242,7 @@ void lp2(int lck){
 
 void lp3(int lck, int pr1){
     kprintf("%s(priority = %d) is requesting to enter critical section\n", proctab[currpid].pname, getprio(currpid));
-    kprintf("Hence, ramping up the priority of %s\n", proctab[pr1].pname, getprio(pr1));
+    kprintf("Hence, ramping up the priority of %s\n", proctab[pr1].pname);
     if(lock(lck, WRITE, DEFAULT_LOCK_PRIO) == OK){
             kprintf("%s(priority = %d) has entered critical section\n", proctab[currpid].pname, getprio(currpid));
             int i = 0;
