@@ -186,39 +186,14 @@ void test3 ()
 
 
 /*----------------------------------Test 4---------------------------*/
-void semaphore1(int s1){
-        kprintf("A\n");
-        int x = wait(s1);
-        kprintf("A: in CS\n");
+void semaphoreProc4(char *msg, int sem){
+        kprintf ("  %s: to acquire sem\n", msg);
+        wait(sem);
+        kprintf ("  %s: acquired sem, sleep 1s\n", msg);
         sleep(1);
-        kprintf("A: moving outside CS.\n");
-        signal(s1);
+        kprintf ("  %s: to release sem\n", msg);
+        signal(sem);
 }
-
-void semaphore2(int s2){
-        int i=0;
-        while(i++ < 50)
-                kprintf("B");
-        kprintf("B\n");
-        //int x = wait(s2);
-        //kprintf("B: in CS\n");
-        sleep(1);
-        i=0;
-        while(i++<50)
-                kprintf("B");        
-        kprintf("B\n");
-        //signal(s2);
-}
-
-void semaphore3(int s3){
-        kprintf("C\n");
-        int x = wait(s3);
-        kprintf("C: in CS\n");
-        sleep(1);
-        kprintf("C: moving outside CS.\n");
-        signal(s3);
-}
-
 
 void writer4(char *msg, int lck){
         kprintf ("  %s: to acquire lock\n", msg);
@@ -234,9 +209,10 @@ void random4(char *msg, int lck){
         kprintf ("starting %s\n", msg);
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
-        kprintf("\n");
+        kprintf ("\n %s sleeping for 3sec.\n");
+        
         sleep(3);
-        kprintf ("%s sleeping for 3sec.\n");
+        
         i=0;
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
@@ -245,17 +221,14 @@ void random4(char *msg, int lck){
 
 void testSem(){
     int semap = screate(1);
-    int sem1 = create(semaphore1,2000,25,"A",1,semap);
-    int sem2 = create(semaphore2,2000,30,"B",1,semap);
-    int sem3 = create(semaphore3,2000,35,"C",1,semap);
+    int sem1, sem2, sem3;
+    sem1 = create(semaphore1,2000,25,"A",1,semap);
+    sem2 = create(semaphore2,2000,30,"B",1,semap);
+    sem3 = create(semaphore3,2000,35,"C",1,semap);
 
-    kprintf("Starting A.\n");
     resume(sem1);
-    //sleep(1);
-    kprintf("Starting B.\n");
     resume(sem2);
     sleep(1);
-    kprintf("Starting C.\n");
     resume(sem3);
     sleep(10);
 }
@@ -269,14 +242,9 @@ void testCustomLocks(){
     writer2 = create(writer4, 2000, 30, "C", 2, "W2", lock);
 
     resume(writer1);
-
     resume(random1);
     sleep(1);
-
     resume(writer2);
-
-    //assert (getprio(wr1) == 25, "Test 3 failed"
-    kprintf("done\n");
 }
 int main( )
 {
