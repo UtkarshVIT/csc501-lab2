@@ -24,17 +24,17 @@ int get_next_process(int lock_index){
 
     while(ctr != lock_list[lock_index].lock_qhead){
         if(proctab[ctr].locktype[lock_index] == WRITE){
-            if(best_writer_priority <= q[ctr].qkey && best_writer_time > proctab[ctr].plreqtime){
+            if(best_writer_priority <= q[ctr].qkey && best_writer_time > proctab[ctr].plreqtime[lock_index]){
                 best_writer_priority = q[ctr].qkey;
                 best_writer = ctr;
-                best_writer_time = proctab[ctr].plreqtime;
+                best_writer_time = proctab[ctr].plreqtime[lock_index];
             }
         }
         else{
-            if(best_reader_priority <= q[ctr].qkey && best_reader_time > proctab[ctr].plreqtime){
+            if(best_reader_priority <= q[ctr].qkey && best_reader_time > proctab[ctr].plreqtime[lock_index]){
                 best_reader_priority = q[ctr].qkey;
                 best_reader = ctr;
-                best_reader_time = proctab[ctr].plreqtime;
+                best_reader_time = proctab[ctr].plreqtime[lock_index];
             }
         }
         ctr=q[ctr].qprev;
@@ -46,7 +46,7 @@ int get_next_process(int lock_index){
         return best_reader;
     }
     else{
-        if(proctab[best_reader].plreqtime > proctab[best_writer].plreqtime){
+        if(proctab[best_reader].plreqtime[lock_index] > proctab[best_writer].plreqtime[lock_index]){
             return best_writer;
         }
         return best_reader;
@@ -68,7 +68,6 @@ int release(int pid, int lock_index){
             return OK;
     else
         --lock_list[lock_index].writer_count;
-    kprintf("trying to release");
 
     if(proctab[pid].pstate != PRCURR && proctab[pid].pstate != PRREADY && pid != currpid){
         kprintf("in here\n");
@@ -76,7 +75,6 @@ int release(int pid, int lock_index){
         return OK;
     }
     
-    kprintf("\nSkipped that part %d, %d, %c, %c \n", pid, currpid, proctab[pid].pstate, PRCURR);
     nextpid = get_next_process(lock_index);
         
     if(nextpid == -1){

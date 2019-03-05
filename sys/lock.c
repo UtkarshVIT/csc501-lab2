@@ -8,7 +8,7 @@ extern unsigned long ctr1000;
 void insert_in_prio_queue(int lock_index, int priority, int lock_type){
 	proctab[currpid].locktype[lock_index] = lock_type;
 	proctab[currpid].pstate = PRWAIT;	
-	proctab[currpid].plreqtime = ctr1000;
+	proctab[currpid].plreqtime[lock_index] = ctr1000;
 	insert(currpid, lock_list[lock_index].lock_qhead, priority);
 	resched();
 }

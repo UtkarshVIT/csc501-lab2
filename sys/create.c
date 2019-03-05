@@ -68,14 +68,14 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	pptr->pnxtkin = BADPID;
 	pptr->pdevs[0] = pptr->pdevs[1] = pptr->ppagedev = BADDEV;
 
-	/*	 */
 	int k;
-	proctab[pid].plreqtime = 0;
-	for(k = 0; k < NLOCKS; k++)
+	
+	for(k = 0; k < NLOCKS; k++){
 		proctab[pid].locktype[k] = FREE;
-	/*	*/
+		proctab[pid].plreqtime[k] = 0;
+	}
 
-		/* Bottom of stack */
+	/* Bottom of stack */
 	*saddr = MAGIC;
 	savsp = (unsigned long)saddr;
 
