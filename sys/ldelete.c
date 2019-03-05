@@ -5,8 +5,7 @@
 
 int ldelete(int lock_index){
 	STATWORD ps;
-	int pid;
-	struct lentry *ctr;
+	int ctr;
 	disable(ps);
 	lock_list[lock_index].lock_type = DELETED;
 	lock_list[lock_index].reader_count = 0;
