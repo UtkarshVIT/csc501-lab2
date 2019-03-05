@@ -4,7 +4,7 @@
 #include <kernel.h>
 #include <proc.h>
 #include <stdio.h>
-#include <lock.h>
+#include "lock.h"
 
 /*------------------------------------------------------------------------
  * getprio -- return the scheduling priority of a given process
