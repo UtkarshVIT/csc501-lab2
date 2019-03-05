@@ -12,12 +12,16 @@ int ldelete(int lock_index){
 	lock_list[lock_index].reader_count = 0;
 	lock_list[lock_index].reader_count = 0;
 	ctr = q[lock_list[lock_index].lock_lqtail].qprev;
+	int flag = 0;		
 	while(ctr != lock_list[lock_index].lock_qhead){
+		flag = 1;
 		proctab[ctr].gotDeleted = 1;
 		dequeue(ctr);
 		ready(ctr, RESCHNO);
 	}
-	resched();
+	if(flag){
+		resched();
+	}
 	restore(ps);
 	return(OK);
 }

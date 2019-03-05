@@ -120,14 +120,76 @@ void test2 ()
         kprintf ("Test 2 OK\n");
 }
 
+/*----------------------------------Test 3---------------------------*/
+void reader3 (char *msg, int lck)
+{
+        int     ret;
 
+        kprintf ("  %s: to acquire lock\n", msg);
+        lock (lck, READ, DEFAULT_LOCK_PRIO);
+        kprintf ("  %s: acquired lock\n", msg);
+        kprintf ("  %s: to release lock\n", msg);
+        releaseall (1, lck);
+}
+
+void writer3 (char *msg, int lck)
+{
+        kprintf ("  %s: to acquire lock\n", msg);
+        lock (lck, WRITE, DEFAULT_LOCK_PRIO);
+        kprintf ("  %s: acquired lock, sleep 10s\n", msg);
+        sleep (10);
+        kprintf ("  %s: to release lock\n", msg);
+        releaseall (1, lck);
+}
+
+void test3 ()
+{
+        int     lck;
+        int     rd1, rd2;
+        int     wr1;
+
+        kprintf("\nTest 3: test the basic priority inheritence\n");
+        lck  = lcreate ();
+        assert (lck != SYSERR, "Test 3 failed");
+
+        rd1 = create(reader3, 2000, 25, "reader3", 2, "reader A", lck);
+        rd2 = create(reader3, 2000, 30, "reader3", 2, "reader B", lck);
+        wr1 = create(writer3, 2000, 20, "writer3", 2, "writer", lck);
+
+        kprintf("-start writer, then sleep 1s. lock granted to write (prio 20)\n");
+        resume(wr1);
+        sleep (1);
+
+        kprintf("-start reader A, then sleep 1s. reader A(prio 25) blocked on the lock\n");
+        resume(rd1);
+        sleep (1);
+    assert (getprio(wr1) == 25, "Test 3 failed");
+
+        kprintf("-start reader B, then sleep 1s. reader B(prio 30) blocked on the lock\n");
+        resume (rd2);
+    sleep (1);
+    assert (getprio(wr1) == 30, "Test 3 failed");
+    
+    kprintf("-kill reader B, then sleep 1s\n");
+    kill (rd2);
+    sleep (1);
+    assert (getprio(wr1) == 25, "Test 3 failed");
+
+    kprintf("-kill reader A, then sleep 1s\n");
+    kill (rd1);
+    sleep(1);
+    assert(getprio(wr1) == 20, "Test 3 failed");
+
+        sleep (8);
+        kprintf ("Test 3 OK\n");
+}
 int main( )
 {
 	linit();
     kprintf("in main funx\n");
-	test1();
-	test2();
-	//test3();
+	//test1();
+	//test2();
+	test3();
 
         /* The hook to shutdown QEMU for process-like execution of XINU.
          * This API call exists the QEMU process.
