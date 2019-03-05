@@ -224,7 +224,7 @@ void random4(char *msg, int lck){
                 kprintf("%s", msg);
         kprintf ("\n %s sleeping for 3sec.\n");
         
-        sleep(3);
+        sleep(2);
         
         i=0;
         for(i=0;i<100;i++)
