@@ -43,10 +43,13 @@ int get_next_process(int lock_index){
         }
         ctr=q[ctr].qprev;
     }
+    kprintf("-->%d, %d\n", best_reader_priority, best_writer_priority);
+    kprintf("==>%d, %d\n", best_reader, best_writer);
     if(best_writer_priority>best_reader_priority){
         kprintf("here1 %d, \n",best_writer);
         return best_writer;
     }
+
     else if(best_writer_priority<best_reader_priority){
         kprintf("here2 %d, \n",best_reader);
         return best_reader;
