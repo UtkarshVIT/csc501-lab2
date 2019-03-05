@@ -56,7 +56,7 @@ int get_next_process(int lock_index){
 int release(int pid, int lock_index){
     int nextpid = 0;
 
-    if(lock_index<0 || lock_index>49 || lock_list[lock_index].lock_type == DELETED || proctab[pid].locktype[lock_index] == FREE)
+    if(lock_index<0 || lock_index>49 || lock_list[lock_index].lock_type == DELETED || !(proctab[pid].locktype[i] == READ || proctab[pid].locktype[i] == WRITE) ||proctab[pid].locktype[lock_index] == FREE)
     {
         return SYSERR;
     }
@@ -115,18 +115,22 @@ int release(int pid, int lock_index){
 int releaseall(int numlocks, int locks, ...)
 {
     STATWORD ps;
-    int ret = OK;
+    int ret, flag=0;
     int lock_index;
     int* base_add = &locks;
-    int i;
+    int i=0;
     disable(ps);
-
-    for(i=0;i<numlocks;i++)
+    while(i<numlocks)
     {
         lock_index = (int)*(base_add+i);
         ret = release(currpid, lock_index);
+        if(ret == SYSERR)
+            flag=1;
+        ++i;
     }
     resched();
     restore(ps);
+    if(flag)
+        return SYSERR;
     return ret;
 }
