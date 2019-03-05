@@ -24,6 +24,7 @@ SYSCALL getprio(int pid)
 	
 	//get virtual priority;
 	int virtual_prio = get_virtual_prio_prio_inversion(pid);
+	kprintf("\n==> %d", virtual_prio);
 
 	restore(ps);
 	return virtual_prio;
