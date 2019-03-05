@@ -68,14 +68,15 @@ int release(int pid, int lock_index){
             return OK;
     else
         --lock_list[lock_index].writer_count;
+    kprintf("trying to release");
 
     if(proctab[pid].pstate != PRCURR && proctab[pid].pstate != PRREADY && pid != currpid){
+        kprintf("in here\n");
         dequeue(pid);
-        if(proctab[pid].gotDeleted)
-            return DELETED;
         return OK;
     }
     
+    kprintf("\nSkipped that part %d, %d, %c, %c \n", pid, currpid, proctab[pid].pstate, PRCURR);
     nextpid = get_next_process(lock_index);
         
     if(nextpid == -1){
