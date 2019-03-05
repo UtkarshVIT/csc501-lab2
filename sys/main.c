@@ -212,66 +212,48 @@ void writer4 (char *msg, int lck)
         releaseall (1, lck);
 }
 */
-void lp1(int lck){
-    kprintf("%s(priority = %d) is requesting to enter critical section\n", proctab[currpid].pname, getprio(currpid));    
-    lock(lck, WRITE, DEFAULT_LOCK_PRIO);
-        kprintf("%s(priority = %d) has entered critical section\n", proctab[currpid].pname, getprio(currpid));
+void lock1(int l1){
+        kprintf("A\n");
+        int x = lock(l1,WRITE,20);
+        kprintf("A: Lock acquired.\n");
         sleep(1);
-        //sleep(1);
-        int i = 0;
-        for(i; i < 100;i++){
-                kprintf("A");
-            //    sleep(1);
-        }
-        kprintf("\n%s has completed critical section(ramped up priority = %d)\n", proctab[currpid].pname, getprio(currpid));
-        releaseall(1, lck);
-        kprintf("%s original priority = %d\n", proctab[currpid].pname, getprio(currpid));
-    
+        kprintf("A: Releasing lock.\n");
+        releaseall(1,l1);
 }
 
-void lp2(int lck){
-    kprintf("%s(priority = %d) has started\n", proctab[currpid].pname, getprio(currpid));
-    sleep(1);
-    int i = 0;
-    for(i; i < 100;i++){
-            kprintf("B");
-            //sleep(1);
-    }
-    kprintf("\n%s has completed its execution\n");
+void lock2(int l2){
+        int i=0;
+        while(i++<50)
+                kprintf("B");
+        kprintf("B\n");
+        sleep(3);
+        i=0;
+        while(i++<50)
+                kprintf("B");
+        kprintf("B\n");
 }
 
-void lp3(int lck, int pr1){
-    kprintf("%s(priority = %d) is requesting to enter critical section\n", proctab[currpid].pname, getprio(currpid));
-    kprintf("Hence, ramping up the priority of %s\n", proctab[pr1].pname);
-    lock(lck, WRITE, DEFAULT_LOCK_PRIO);
-    kprintf("%s(priority = %d) has entered critical section\n", proctab[currpid].pname, getprio(currpid));
-    int i = 0;
-    for(i; i < 100;i++){
-        kprintf("C");
-              //      sleep(1);
-    }
-    kprintf("\n%s has completed critical section\n", proctab[currpid].pname);
-    releaseall(1, lck);
+void lock3(int l3){
+        kprintf("C\n");
+        int x = lock(l3,WRITE,20);
+        kprintf("C: Lock acquired\n");
+        sleep(1);
+        kprintf("C: Releasing lock\n");
+        releaseall(1,l3);
 }
-
 
 void testCustomLocks(){
-    int lck;
-    lck = lcreate();
-
-    int pr1 = create(lp1, 2000, 10, "p1", 1, lck);
-    int pr2 = create(lp2, 2000, 20, "p2", 1, lck);
-    int pr3 = create(lp3, 2000, 30, "p3", 2, lck, pr1);
-    kprintf("%d, %d, %d", pr1, pr2, pr3);
-    
-    resume(pr1);
-  //  sleep(1);
-    resume(pr2);
-    sleep(1);
-    resume(pr3);
-    sleep(5);
-
-    ldelete(lck);
+    int lock_test = lcreate();
+        int lck1 = create(lock1,2000,25,"A",1,lock_test);
+        int lck2 = create(lock2,2000,30,"B",1,lock_test);
+        int lck3 = create(lock3,2000,35,"C",1,lock_test);
+        kprintf("Starting A.\n");
+        resume(lck1);
+        kprintf("Starting B.\n");
+        resume(lck2);
+        sleep(1);
+        kprintf("Starting C.\n");
+        resume(lck3);
 
 
 
