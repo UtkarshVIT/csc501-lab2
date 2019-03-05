@@ -11,11 +11,11 @@ int get_next_process(int lock_index){
     int ctr = q[lock_list[lock_index].lock_lqtail].qprev;
     int best_reader;
     int best_reader_priority = -1;
-    unsigned long best_reader_time = curr_time;
+    unsigned long best_reader_time = 4294967295;
 
     int best_writer;
-    int best_writer_priority = -1;   
-    unsigned long best_writer_time = curr_time;
+    int best_writer_priority = -1;
+    unsigned long best_writer_time = 4294967295;
 
     if(ctr == lock_list[lock_index].lock_qhead)
     {
