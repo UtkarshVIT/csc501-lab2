@@ -189,7 +189,7 @@ void test3 ()
 
 void writer4(char*msg, int lck){
         kprintf("A\n");
-        lock(l1, WRITE, 20);
+        lock(lck, WRITE, 20);
         kprintf("%s: Lock acquired.\n", msg);
         sleep(1);
         kprintf("%s: Releasing lock.\n", msg);
