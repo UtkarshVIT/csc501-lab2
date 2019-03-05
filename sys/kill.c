@@ -22,6 +22,7 @@ void release_all_locks_for_process(int pid){
 		}
 		++i;
 	}
+
 }
 
 SYSCALL kill(int pid) {
