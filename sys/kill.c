@@ -20,9 +20,15 @@ void release_all_locks_for_process(int pid){
 		if (proctab[pid].locktype[i] != FREE){
 			kprintf("\nRemoving lock\n");
 			release(pid, i);
+			int ctr = q[lock_list[i].lock_lqtail].qprev;
+			while(ctr != lock_list[i].lock_qhead){
+				kprintf("%d ", proctab[ctr].pprio);
+				ctr=q[ctr].qprev;
+			}
 		}
 		++i;
 	}
+
 }
 
 SYSCALL kill(int pid) {

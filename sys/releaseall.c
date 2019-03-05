@@ -62,8 +62,7 @@ int release(int pid, int lock_index){
     }
 
     proctab[pid].locktype[lock_index] = FREE;
-    dequeue(pid);
-    
+
     if(lock_list[lock_index].lock_type == READ)
         if(--lock_list[lock_index].reader_count)
             return OK;
