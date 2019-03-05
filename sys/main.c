@@ -187,7 +187,7 @@ void test3 ()
 
 /*----------------------------------Test 4---------------------------*/
 
-void writer4(char*msg, int lck){
+void writer4(char *msg, int lck){
         kprintf("A\n");
         lock(lck, WRITE, 20);
         kprintf("%s: Lock acquired.\n", msg);
@@ -196,24 +196,22 @@ void writer4(char*msg, int lck){
         releaseall(1, lck);
 }
 
-void random4(int lck){
-        int i=0;
-        while(i++<50)
-                kprintf("B");
-        kprintf("B\n");
+void random4(char *msg, int lck){
+        int i;
+        for(i=0;i<100;i++)
+                kprintf("%s", msg);
         sleep(3);
         i=0;
-        while(i++<50)
-                kprintf("B");
-        kprintf("B\n");
+        for(i=0;i<100;i++)
+                kprintf("%s", msg);
 }
 
 void testCustomLocks(){
     int lock = lcreate();
     //rd1 =       create(reader2, 2000, 20, "r", 3, 'A', lck, 20);
-    int writer1 = create(writer4, 2000, 25, "A", 2, 'A', lock);
-    int random1 = create(random4, 2000, 30, "B", 1, lock);
-    int writer2 = create(writer4, 2000, 35, "C", 2, 'C', lock);
+    int writer1 = create(writer4, 2000, 20, "A", 2, "A", lock);
+    int random1 = create(random4, 2000, 25, "B", 1, "B", lock);
+    int writer2 = create(writer4, 2000, 30, "C", 2, "C", lock);
 
     kprintf("Starting A.\n");
     resume(writer1);
