@@ -214,7 +214,7 @@ void writer4 (char *msg, int lck)
 */
 void lp1(int lck){
     kprintf("%s(priority = %d) is requesting to enter critical section\n", proctab[currpid].pname, getprio(currpid));    
-    if(lock(lck, WRITE, DEFAULT_LOCK_PRIO) == OK){
+    lock(lck, WRITE, DEFAULT_LOCK_PRIO);
         kprintf("%s(priority = %d) has entered critical section\n", proctab[currpid].pname, getprio(currpid));
         sleep(1);
         //sleep(1);
@@ -226,7 +226,7 @@ void lp1(int lck){
         kprintf("\n%s has completed critical section(ramped up priority = %d)\n", proctab[currpid].pname, getprio(currpid));
         releaseall(1, lck);
         kprintf("%s original priority = %d\n", proctab[currpid].pname, getprio(currpid));
-    }
+    
 }
 
 void lp2(int lck){
