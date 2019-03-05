@@ -70,6 +70,7 @@ int release(int pid, int lock_index){
         --lock_list[lock_index].writer_count;
 
     if(proctab[pid].pstate == PRCURR && pid != currpid){
+        kprintf("in here\n");
         dequeue(pid);
         return OK;
         /*
