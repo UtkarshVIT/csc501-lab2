@@ -7,6 +7,7 @@ int ldelete(int lock_index){
 	STATWORD ps;
 	int ctr;
 	disable(ps);
+	kprintf("Deleting a lock\n");
 	lock_list[lock_index].lock_type = DELETED;
 	lock_list[lock_index].reader_count = 0;
 	lock_list[lock_index].reader_count = 0;
