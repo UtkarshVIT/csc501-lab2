@@ -84,7 +84,7 @@ int release(int pid, int lock_index){
             }
             */
     }
-    kprintf("\nSkipped that part\n");
+    kprintf("\nSkipped that part %d, %d\n", pid, currpid);
     nextpid = get_next_process(lock_index);
         
     if(nextpid == -1){
