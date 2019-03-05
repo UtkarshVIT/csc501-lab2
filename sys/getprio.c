@@ -4,6 +4,7 @@
 #include <kernel.h>
 #include <proc.h>
 #include <stdio.h>
+#include <lock.h>
 
 /*------------------------------------------------------------------------
  * getprio -- return the scheduling priority of a given process
@@ -19,6 +20,20 @@ SYSCALL getprio(int pid)
 		restore(ps);
 		return(SYSERR);
 	}
+	//get virtual priority;
+	int i=0;
+	int max_prio = pptr->pprio;
+	while(i<NLOCKS){
+		if(proctab[pid].locks[i] == READ || proctab[pid].locks[i] == WRITE){
+			int ctr = q[lock_list[i].lock_lqtail].qprev;
+			while(ctr != lock_list[i].lock_qhead){
+				if(proctab[ctr].pprio > max_prio)
+					max_prio = proctab[ctr].pprio;
+			}
+		}
+		++i;
+	}
+
 	restore(ps);
-	return(pptr->pprio);
+	return max_prio;
 }
