@@ -106,7 +106,7 @@ int release(int pid, int lock_index){
         kprintf("this is now ready\n");
         lock_list[lock_index].writer_count++;
         dequeue(nextpid);
-        kprintf("new we dequed\n");
+        kprintf("new we dequed %d\n", nextpid);
         ready(nextpid,RESCHNO);
         kprintf("put it in ready queue\n");
     }

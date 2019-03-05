@@ -243,16 +243,15 @@ void lp2(int lck){
 void lp3(int lck, int pr1){
     kprintf("%s(priority = %d) is requesting to enter critical section\n", proctab[currpid].pname, getprio(currpid));
     kprintf("Hence, ramping up the priority of %s\n", proctab[pr1].pname);
-    if(lock(lck, WRITE, DEFAULT_LOCK_PRIO) == OK){
-            kprintf("%s(priority = %d) has entered critical section\n", proctab[currpid].pname, getprio(currpid));
-            int i = 0;
-            for(i; i < 100;i++){
-                    kprintf("C");
+    lock(lck, WRITE, DEFAULT_LOCK_PRIO);
+    kprintf("%s(priority = %d) has entered critical section\n", proctab[currpid].pname, getprio(currpid));
+    int i = 0;
+    for(i; i < 100;i++){
+        kprintf("C");
               //      sleep(1);
-            }
-            kprintf("\n%s has completed critical section\n", proctab[currpid].pname);
-            releaseall(1, lck);
     }
+    kprintf("\n%s has completed critical section\n", proctab[currpid].pname);
+    releaseall(1, lck);
 }
 
 
@@ -263,6 +262,7 @@ void testCustomLocks(){
     int pr1 = create(lp1, 2000, 10, "p1", 1, lck);
     int pr2 = create(lp2, 2000, 20, "p2", 1, lck);
     int pr3 = create(lp3, 2000, 30, "p3", 2, lck, pr1);
+    kprintf("%d, %d, %d", pr1, pr2, pr3);
     
     resume(pr1);
   //  sleep(1);
