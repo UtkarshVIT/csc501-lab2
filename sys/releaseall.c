@@ -69,6 +69,21 @@ int release(int pid, int lock_index){
     else
         --lock_list[lock_index].writer_count;
 
+    if(proctab[pid].pstate == PRCURR && pid != currpid){
+        dequeue(pid);
+        return OK;
+        /*
+        int ctr = q[lock_list[i].lock_lqtail].qprev;
+            while(ctr != lock_list[i].lock_qhead){
+                if(q[ctr].prev == pid){
+                    q[ctr].prev = q[q[ctr].prev].prev
+                    return OK;
+                }
+                ctr=q[ctr].qprev;
+            }
+            */
+    }
+
     nextpid = get_next_process(lock_index);
         
     if(nextpid == -1){
