@@ -27,7 +27,7 @@ int get_next_process(int lock_index){
         if(proctab[ctr].locktype[lock_index] == WRITE){
             kprintf("yoyoyo");
             kprintf("%lu, %lu", best_writer_time, proctab[ctr].plreqtime[lock_index]);
-            if(best_writer_priority <= q[ctr].qkey && best_writer_time > proctab[ctr].plreqtime[lock_index]){
+            if(best_writer_priority <= q[ctr].qkey && best_writer_time >= proctab[ctr].plreqtime[lock_index]){
                 kprintf("wwww");
                 best_writer_priority = q[ctr].qkey;
                 best_writer = ctr;
@@ -36,7 +36,7 @@ int get_next_process(int lock_index){
         }
         else if(proctab[ctr].locktype[lock_index] == READ){
             kprintf("yasas");
-            if(best_reader_priority <= q[ctr].qkey && best_reader_time > proctab[ctr].plreqtime[lock_index]){
+            if(best_reader_priority <= q[ctr].qkey && best_reader_time >= proctab[ctr].plreqtime[lock_index]){
                 best_reader_priority = q[ctr].qkey;
                 best_reader = ctr;
                 best_reader_time = proctab[ctr].plreqtime[lock_index];
