@@ -54,7 +54,6 @@ SYSCALL kill(int pid) {
 	switch (pptr->pstate) {
 
 	case PRCURR:
-		kprintf("in PRCURR\n");
 		release_all_locks_for_process(pid);
 		pptr->pstate = PRFREE; /* suicide */
 		resched();
@@ -63,7 +62,6 @@ SYSCALL kill(int pid) {
 		semaph[pptr->psem].semcnt++;
 
 	case PRREADY:
-		kprintf("in PRREADY\n");
 		release_all_locks_for_process(pid);
 		dequeue(pid);
 		pptr->pstate = PRFREE;
@@ -74,7 +72,6 @@ SYSCALL kill(int pid) {
 		unsleep(pid);
 		/* fall through	*/
 	default:
-		kprintf("in DEFAULT\n");
 		release_all_locks_for_process(pid);
 		pptr->pstate = PRFREE;
 			}
