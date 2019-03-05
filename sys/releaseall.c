@@ -107,6 +107,7 @@ int release(int pid, int lock_index){
         lock_list[lock_index].writer_count++;
         dequeue(nextpid);
         ready(nextpid,RESCHNO);
+        kprintf("put it in ready queue");
     }
     if(proctab[pid].gotDeleted)
         return DELETED;
