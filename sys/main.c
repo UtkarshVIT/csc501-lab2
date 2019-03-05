@@ -262,7 +262,7 @@ void testCustomLocks(){
 
     int pr1 = create(lp1, 2000, 10, "p1", 1, lck);
     int pr2 = create(lp2, 2000, 20, "p2", 1, lck);
-    int pr3 = create(lp3, 2000, 30, "p3", 2, lck);
+    int pr3 = create(lp3, 2000, 30, "p3", 2, lck, pr1);
     
     resume(pr1);
   //  sleep(1);
