@@ -210,10 +210,10 @@ void random4(int lck){
 
 void testCustomLocks(){
     int lock = lcreate();
-    //rd1 = create(reader2, 2000, 20, "reader2", 3, 'A', lck, 20);
-    int writer1 = create(writer4, 2000, 25, "A", 2, "A",lock);
+    //rd1 =       create(reader2, 2000, 20, "r", 3, 'A', lck, 20);
+    int writer1 = create(writer4, 2000, 25, "A", 2, 'A',lock);
     int random1 = create(random4, 2000, 30, "B", 1, lock);
-    int writer2 = create(writer4, 2000, 35, "C", 2, "C",lock);
+    int writer2 = create(writer4, 2000, 35, "C", 2, 'C', lock);
 
     kprintf("Starting A.\n");
     resume(writer1);
