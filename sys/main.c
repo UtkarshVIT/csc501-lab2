@@ -189,36 +189,40 @@ void test3 ()
 
 void writer4(char *msg, int lck){
         kprintf("A\n");
+        kprintf ("  %s: to acquire lock\n", msg);
         lock(lck, WRITE, 20);
-        kprintf("%s: Lock acquired.\n", msg);
+        kprintf ("  %s: acquired lock, sleep 1s\n", msg);
         sleep(1);
-        kprintf("%s: Releasing lock.\n", msg);
+        kprintf ("  %s: to release lock\n", msg);
         releaseall(1, lck);
 }
 
 void random4(char *msg, int lck){
         int i;
+        kprintf ("starting %s\n", msg);
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
+        kprintf("\n")
         sleep(3);
         i=0;
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
+        kprintf("\n");
 }
 
 void testCustomLocks(){
     int lock = lcreate();
-    //rd1 =       create(reader2, 2000, 20, "r", 3, 'A', lck, 20);
-    int writer1 = create(writer4, 2000, 20, "A", 2, "A", lock);
-    int random1 = create(random4, 2000, 25, "B", 1, "B", lock);
-    int writer2 = create(writer4, 2000, 30, "C", 2, "C", lock);
+    int writer1, random1, writer2;
 
-    kprintf("Starting A.\n");
+    writer1 = create(writer4, 2000, 20, "A", 2, "W1", lock);
+    random1 = create(random4, 2000, 25, "B", 1, "R1", lock);
+    writer2 = create(writer4, 2000, 30, "C", 2, "W2", lock);
+
     resume(writer1);
-    kprintf("Starting B.\n");
+
     resume(random1);
     sleep(1);
-    kprintf("Starting C.\n");
+
     resume(writer2);
 
     //assert (getprio(wr1) == 25, "Test 3 failed"
