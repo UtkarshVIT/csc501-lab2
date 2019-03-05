@@ -203,7 +203,7 @@ void random4(char *msg, int lck){
                 kprintf("%s", msg);
         kprintf("\n");
         sleep(3);
-        kprintf ("sleeping %s for 3sec.\n";
+        kprintf ("%s sleeping for 3sec.\n";
         i=0;
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
