@@ -107,7 +107,8 @@ int release(int pid, int lock_index){
         dequeue(nextpid);
         ready(nextpid,RESCHNO);
     }
-
+    if(proctab[pid].gotDeleted)
+        return DELETED;
     return OK;
 }
 

@@ -21,7 +21,6 @@ int lock(int lock_index, int lock_type, int priority){
 	if(lock_list[lock_index].lock_type == FREE){
 		lock_list[lock_index].lock_type = lock_type;
 		proctab[currpid].locktype[lock_index] = lock_type;
-		//lock_list[lock_index].holders[currpid] = lock_type;
 
 		if(lock_type == READ){
 			lock_list[lock_index].reader_count++;
