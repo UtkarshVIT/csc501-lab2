@@ -186,6 +186,39 @@ void test3 ()
 
 
 /*----------------------------------Test 4---------------------------*/
+void semaphore1(int s1){
+        kprintf("A\n");
+        int x = wait(s1);
+        kprintf("A: in CS\n");
+        sleep(1);
+        kprintf("A: moving outside CS.\n");
+        signal(s1);
+}
+
+void semaphore2(int s2){
+        int i=0;
+        while(i++ < 50)
+                kprintf("B");
+        kprintf("B\n");
+        //int x = wait(s2);
+        //kprintf("B: in CS\n");
+        sleep(1);
+        i=0;
+        while(i++<50)
+                kprintf("B");        
+        kprintf("B\n");
+        //signal(s2);
+}
+
+void semaphore3(int s3){
+        kprintf("C\n");
+        int x = wait(s3);
+        kprintf("C: in CS\n");
+        sleep(1);
+        kprintf("C: moving outside CS.\n");
+        signal(s3);
+}
+
 
 void writer4(char *msg, int lck){
         kprintf ("  %s: to acquire lock\n", msg);
@@ -208,6 +241,23 @@ void random4(char *msg, int lck){
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
         kprintf("\n");
+    }
+
+void testSem(){
+    int semap = screate(1);
+    int sem1 = create(semaphore1,2000,25,"A",1,semap);
+    int sem2 = create(semaphore2,2000,30,"B",1,semap);
+    int sem3 = create(semaphore3,2000,35,"C",1,semap);
+
+    kprintf("Starting A.\n");
+    resume(sem1);
+    //sleep(1);
+    kprintf("Starting B.\n");
+    resume(sem2);
+    sleep(1);
+    kprintf("Starting C.\n");
+    resume(sem3);
+    sleep(10);
 }
 
 void testCustomLocks(){
@@ -234,7 +284,8 @@ int main( )
 	//test1();
 	//test2();
 	//stest3();
-    testCustomLocks();
+    testSem();
+    //testCustomLocks();
 
         /* The hook to shutdown QEMU for process-like execution of XINU.
          * This API call exists the QEMU process.
