@@ -24,7 +24,7 @@ int resched()
 	register struct	pentry	*ctr = getlast(rdytail);
 
 	int virtual_prio = get_virtual_prio(currpid);
-	kprintf("-->%d\n",virtual_prio);
+	
 	if ( ( (optr= &proctab[currpid])->pstate == PRCURR) &&
 	   (lastkey(rdytail)<virtual_prio)) {
 		return(OK);
