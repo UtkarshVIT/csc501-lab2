@@ -183,12 +183,68 @@ void test3 ()
         sleep (8);
         kprintf ("Test 3 OK\n");
 }
+
+
+/*----------------------------------Test 4---------------------------*/
+
+void reader4 (char *msg, int lck)
+{
+        int     ret;
+
+        kprintf ("  %s: to acquire lock\n", msg);
+        lock (lck, READ, DEFAULT_LOCK_PRIO);
+        int i=0;
+        for(i=0;i<100;i++)
+            kprintf("%s", msg);
+        kprintf ("acquired lock", msg);
+        releaseall (1, lck);
+}
+
+void writer4 (char *msg, int lck)
+{
+        kprintf ("  %s: to acquire lock\n", msg);
+        lock (lck, WRITE, DEFAULT_LOCK_PRIO);
+        kprintf ("  %s: acquired lock\n", msg);
+        int i=0;
+        for(i=0;i<100;i++)
+            kprintf("%s", msg);
+        kprintf ("  %s: to release lock\n", msg);
+        releaseall (1, lck);
+}
+
+
+void testCustomLocks(){
+    int     lck;
+    int     low, med, high;
+
+    lck  = lcreate ();
+    
+    low = create(reader4, 2000, 20, "reader4", 2, "reader A", lck);
+    high = create(writer4, 2000, 40, "writer4", 2, "writer A", lck);
+    med = create(reader4, 2000, 30, "reader4", 2, "reader B", lck);
+
+    kprintf("\nTest 3: test the basic priority inheritence\n");
+    lck  = lcreate ();
+
+    kprintf("-start reader A. lock granted to reader \n");
+    resume(low);
+
+    kprintf("-start writer \n");
+    resume(high);
+
+    kprintf("-start reader B \n");
+    resume(med);
+
+    //assert (getprio(wr1) == 25, "Test 3 failed"
+    kprintf("done\n");
+}
 int main( )
 {
     kprintf("in main funx\n");
-	test1();
-	test2();
-	test3();
+	//test1();
+	//test2();
+	//test3();
+    testCustomLocks();
 
         /* The hook to shutdown QEMU for process-like execution of XINU.
          * This API call exists the QEMU process.

@@ -1,0 +1,4 @@
+1. 1. One of the solutions to priority inversion is Interrupt Disabling. If we disable interrupts for a process in runnning state, then it cannot be preempted by another process irresepective of priority.
+
+
+
