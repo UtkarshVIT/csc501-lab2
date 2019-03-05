@@ -103,7 +103,7 @@ int release(int pid, int lock_index){
 
     else{
         lock_list[lock_index].lock_type = WRITE;
-        kpritnf("this is now ready");
+        kprintf("this is now ready");
         lock_list[lock_index].writer_count++;
         dequeue(nextpid);
         ready(nextpid,RESCHNO);
