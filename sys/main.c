@@ -186,7 +186,7 @@ void test3 ()
 
 
 /*----------------------------------Test 4---------------------------*/
-
+/*
 void reader4 (char *msg, int lck)
 {
         int     ret;
@@ -194,7 +194,7 @@ void reader4 (char *msg, int lck)
         kprintf ("  %s: to acquire lock\n", msg);
         lock (lck, READ, DEFAULT_LOCK_PRIO);
         int i=0;
-        for(i=0;i<100;i++)
+        for(i=0;i<1000;i++)
             kprintf("%s", msg);
         kprintf ("acquired lock", msg);
         releaseall (1, lck);
@@ -206,34 +206,74 @@ void writer4 (char *msg, int lck)
         lock (lck, WRITE, DEFAULT_LOCK_PRIO);
         kprintf ("  %s: acquired lock\n", msg);
         int i=0;
-        for(i=0;i<100;i++)
+        for(i=0;i<1000;i++)
             kprintf("%s", msg);
         kprintf ("  %s: to release lock\n", msg);
         releaseall (1, lck);
 }
+*/
+void lp1(int lck){
+    kprintf("%s(priority = %d) is requesting to enter critical section\n", proctab[currpid].pname, getprio(currpid));    
+    if(lock(lck, WRITE, DEFAULT_LOCK_PRIO) == OK){
+        kprintf("%s(priority = %d) has entered critical section\n", proctab[currpid].pname, getprio(currpid));
+        sleep(1);
+        //sleep(1);
+        int i = 0;
+        for(i; i < 100;i++){
+                kprintf("A");
+            //    sleep(1);
+        }
+        kprintf("\n%s has completed critical section(ramped up priority = %d)\n", proctab[currpid].pname, getprio(currpid));
+        releaseall(1, lck);
+        kprintf("%s original priority = %d\n", proctab[currpid].pname, getprio(currpid));
+    }
+}
+
+void lp2(int lck){
+    kprintf("%s(priority = %d) has started\n", proctab[currpid].pname, getprio(currpid));
+    sleep(1);
+    int i = 0;
+    for(i; i < 100;i++){
+            kprintf("B");
+            //sleep(1);
+    }
+    kprintf("\n%s has completed its execution\n");
+}
+
+void lp3(int lck, int pr1){
+    kprintf("%s(priority = %d) is requesting to enter critical section\n", proctab[currpid].pname, getprio(currpid));
+    kprintf("Hence, ramping up the priority of %s\n", proctab[pr1].pname, getprio(pr1));
+    if(lock(lck, WRITE, DEFAULT_LOCK_PRIO) == OK){
+            kprintf("%s(priority = %d) has entered critical section\n", proctab[currpid].pname, getprio(currpid));
+            int i = 0;
+            for(i; i < 100;i++){
+                    kprintf("C");
+              //      sleep(1);
+            }
+            kprintf("\n%s has completed critical section\n", proctab[currpid].pname);
+            releaseall(1, lck);
+    }
+}
 
 
 void testCustomLocks(){
-    int     lck;
-    int     low, med, high;
+    int lck;
+    lck = lcreate();
 
-    lck  = lcreate ();
+    int pr1 = create(lp1, 2000, 10, "p1", 1, lck);
+    int pr2 = create(lp2, 2000, 20, "p2", 1, lck);
+    int pr3 = create(lp3, 2000, 30, "p3", 2, lck, pr1);
     
-    low = create(reader4, 2000, 20, "reader4", 2, "reader A", lck);
-    high = create(writer4, 2000, 40, "writer4", 2, "writer A", lck);
-    med = create(reader4, 2000, 30, "reader4", 2, "reader B", lck);
+    resume(pr1);
+  //  sleep(1);
+    resume(pr2);
+    sleep(1);
+    resume(pr3);
+    sleep(5);
 
-    kprintf("\nTest 3: test the basic priority inheritence\n");
-    lck  = lcreate ();
+    ldelete(lck);
 
-    kprintf("-start reader A. lock granted to reader \n");
-    resume(low);
 
-    kprintf("-start writer \n");
-    resume(high);
-
-    kprintf("-start reader B \n");
-    resume(med);
 
     //assert (getprio(wr1) == 25, "Test 3 failed"
     kprintf("done\n");
@@ -243,7 +283,7 @@ int main( )
     kprintf("in main funx\n");
 	//test1();
 	//test2();
-	//test3();
+	//stest3();
     testCustomLocks();
 
         /* The hook to shutdown QEMU for process-like execution of XINU.
