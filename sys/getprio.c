@@ -4,6 +4,7 @@
 #include <kernel.h>
 #include <proc.h>
 #include <stdio.h>
+#include <q.h>
 #include "lock.h"
 
 /*------------------------------------------------------------------------
@@ -24,7 +25,7 @@ SYSCALL getprio(int pid)
 	int i=0;
 	int max_prio = pptr->pprio;
 	while(i<NLOCKS){
-		if(proctab[pid].locks[i] == READ || proctab[pid].locks[i] == WRITE){
+		if(proctab[pid].locktype[i] == READ || proctab[pid].locktype[i] == WRITE){
 			int ctr = q[lock_list[i].lock_lqtail].qprev;
 			while(ctr != lock_list[i].lock_qhead){
 				if(proctab[ctr].pprio > max_prio)
