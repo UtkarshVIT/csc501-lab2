@@ -42,5 +42,5 @@ SYSCALL getprio(int pid)
 	
 
 	restore(ps);
-	return get_virtual_prio(max_prio);
+	return get_virtual_prio(pid);
 }
