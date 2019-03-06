@@ -105,5 +105,6 @@ int main( )
     testCustomLocks();
     kprintf("\n-----------------using Xinu sem-----------------------\n");
     testSem();
+    kprintf("reached here");
     return 0;
 }
