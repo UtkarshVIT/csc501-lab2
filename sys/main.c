@@ -28,14 +28,13 @@ void semaphoreProc4(char *msg, int sem){
         sleep(1);
         kprintf ("  %s: to release sem\n", msg);
         signal(sem);
-        kprintf("temp");
 }
 void randomSemProc4(char *msg, int lck){
         int i;
         kprintf ("starting %s\n", msg);
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
-        kprintf ("\n %s sleeping for 3sec.\n");
+        kprintf ("\nsleep 1 sec\n");
         
         sleep(1);
         
@@ -58,7 +57,7 @@ void random4(char *msg, int lck){
         kprintf ("starting %s\n", msg);
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
-        kprintf ("\n %s sleeping for 3sec.\n");
+        kprintf ("\nsleep 2 sec\n");
         
         sleep(2);
         
@@ -79,7 +78,7 @@ void testSem(){
     resume(sem2);
     sleep(2);
     resume(sem3);
-    sleep(10);
+    
 }
 
 void testCustomLocks(){
@@ -105,6 +104,6 @@ int main( )
     testCustomLocks();
     kprintf("\n-----------------using Xinu sem-----------------------\n");
     testSem();
-    kprintf("reached here");
+    shutdown(); 
     return 0;
 }
