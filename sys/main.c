@@ -79,7 +79,7 @@ void testSem(){
     resume(sem2);
     sleep(2);
     resume(sem3);
-    
+    sleep(10);
 }
 
 void testCustomLocks(){
@@ -106,6 +106,5 @@ int main( )
     kprintf("\n-----------------using Xinu sem-----------------------\n");
     testSem();
     kprintf("reached here");
-     shutdown();
     return 0;
 }
