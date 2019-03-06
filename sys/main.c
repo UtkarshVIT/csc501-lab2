@@ -28,6 +28,7 @@ void semaphoreProc4(char *msg, int sem){
         sleep(1);
         kprintf ("  %s: to release sem\n", msg);
         signal(sem);
+        kprintf("temp");
 }
 void randomSemProc4(char *msg, int lck){
         int i;
