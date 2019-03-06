@@ -34,7 +34,7 @@ void randomSemProc4(char *msg, int lck){
         kprintf ("starting %s\n", msg);
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
-        kprintf ("\n %s sleeping for 3sec.\n");
+        kprintf ("\nsleep 1 sec\n");
         
         sleep(1);
         
@@ -57,7 +57,7 @@ void random4(char *msg, int lck){
         kprintf ("starting %s\n", msg);
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
-        kprintf ("\n %s sleeping for 3sec.\n");
+        kprintf ("\nsleep 2 sec\n");
         
         sleep(2);
         
@@ -104,5 +104,6 @@ int main( )
     testCustomLocks();
     kprintf("\n-----------------using Xinu sem-----------------------\n");
     testSem();
+    shutdown();
     return 0;
 }
