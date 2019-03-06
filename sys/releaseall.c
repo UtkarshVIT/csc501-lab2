@@ -24,7 +24,7 @@ int get_next_process(int lock_index){
     kprintf("\n");
     while(ctr != lock_list[lock_index].lock_qhead){
         //kprintf("%d, %d", ctr, q[ctr].qkey);
-        if(proctab[ctr].locktype[lock_index] == WRITE){
+        if(proctab[ctr].lock_type[lock_index] == WRITE){
             //kprintf("yoyoyo");
             //kprintf("%lu, %lu", best_writer_time, proctab[ctr].lock_q_wait_time[lock_index]);
             if(best_writer_priority <= q[ctr].qkey && best_writer_time >= proctab[ctr].lock_q_wait_time[lock_index]){
@@ -34,7 +34,7 @@ int get_next_process(int lock_index){
                 best_writer_time = proctab[ctr].lock_q_wait_time[lock_index];
             }
         }
-        else if(proctab[ctr].locktype[lock_index] == READ){
+        else if(proctab[ctr].lock_type[lock_index] == READ){
             //kprintf("yasas");
             if(best_reader_priority <= q[ctr].qkey && best_reader_time >= proctab[ctr].lock_q_wait_time[lock_index]){
                 best_reader_priority = q[ctr].qkey;
@@ -68,12 +68,12 @@ int get_next_process(int lock_index){
 int release(int pid, int lock_index){
     int nextpid = 0;
 
-    if(lock_index<0 || lock_index>49 || lock_list[lock_index].lock_type == DELETED || !(proctab[pid].locktype[lock_index] == READ || proctab[pid].locktype[lock_index] == WRITE) ||proctab[pid].locktype[lock_index] == FREE)
+    if(lock_index<0 || lock_index>49 || lock_list[lock_index].lock_type == DELETED || !(proctab[pid].lock_type[lock_index] == READ || proctab[pid].lock_type[lock_index] == WRITE) ||proctab[pid].lock_type[lock_index] == FREE)
     {
         return SYSERR;
     }
 
-    proctab[pid].locktype[lock_index] = FREE;
+    proctab[pid].lock_type[lock_index] = FREE;
 
     if(lock_list[lock_index].lock_type == READ)
         if(--lock_list[lock_index].reader_count)
@@ -94,14 +94,14 @@ int release(int pid, int lock_index){
         return OK;
     }
 
-    if(proctab[nextpid].locktype[lock_index] == READ){
+    if(proctab[nextpid].lock_type[lock_index] == READ){
         int ctr = q[nextpid].qprev;
         dequeue(nextpid);
         ready(nextpid,RESCHNO);
         lock_list[lock_index].reader_count++;
         lock_list[lock_index].lock_type = READ;
         while(ctr != lock_list[lock_index].lock_qhead){
-            if(proctab[ctr].locktype[lock_index] == READ){
+            if(proctab[ctr].lock_type[lock_index] == READ){
                 lock_list[lock_index].reader_count++;
                 dequeue(ctr);
                 ready(ctr,RESCHNO);

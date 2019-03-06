@@ -6,7 +6,7 @@
 extern unsigned long ctr1000;
 
 void insert_in_prio_queue(int lock_index, int priority, int lock_type){
-	proctab[currpid].locktype[lock_index] = lock_type;
+	proctab[currpid].lock_type[lock_index] = lock_type;
 	proctab[currpid].pstate = PRWAIT;	
 	proctab[currpid].lock_q_wait_time[lock_index] = ctr1000;
 	insert(currpid, lock_list[lock_index].lock_qhead, priority);
@@ -25,7 +25,7 @@ int lock(int lock_index, int lock_type, int priority){
 	/* If the lock lock_type in FREE */
 	if(lock_list[lock_index].lock_type == FREE){
 		lock_list[lock_index].lock_type = lock_type;
-		proctab[currpid].locktype[lock_index] = lock_type;
+		proctab[currpid].lock_type[lock_index] = lock_type;
 
 		if(lock_type == WRITE){
 			lock_list[lock_index].writer_count++;
@@ -44,7 +44,7 @@ int lock(int lock_index, int lock_type, int priority){
 			ctr = q[lock_list[lock_index].lock_lqtail].qprev;
 
 			for(ctr = q[lock_list[lock_index].lock_lqtail].qprev; (ctr!=lock_list[lock_index].lock_qhead) && (priority<q[ctr].qkey); ctr=q[ctr].qprev){
-				if(proctab[ctr].locktype[lock_index]==WRITE){
+				if(proctab[ctr].lock_type[lock_index]==WRITE){
 					flag = 1;
 					break;
 				}
@@ -55,7 +55,7 @@ int lock(int lock_index, int lock_type, int priority){
 			}
 
 			else{
-				proctab[currpid].locktype[lock_index] = lock_type;
+				proctab[currpid].lock_type[lock_index] = lock_type;
 				lock_list[lock_index].reader_count += 1;
 				lock_list[lock_index].lock_type = lock_type;
 			}

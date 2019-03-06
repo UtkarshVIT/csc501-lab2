@@ -17,7 +17,7 @@
 void release_all_locks_for_process(int pid){
 	int i = 0 ;
 	while(i < NLOCKS) {
-		if (proctab[pid].locktype[i] != FREE){
+		if (proctab[pid].lock_type[i] != FREE){
 			release(pid, i);
 		}
 		++i;

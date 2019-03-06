@@ -60,7 +60,7 @@ struct	pentry	{
 	int	ppagedev;		/* pageing dgram device		*/
 	int	pwaitret;
 	unsigned int lock_q_wait_time[50];
-	int locktype[50];
+	int lock_type[50];
 	int gotDeleted;
 };
 

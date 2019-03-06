@@ -71,7 +71,7 @@ SYSCALL create(procaddr,ssize,priority,name,nargs,args)
 	int k;
 	
 	for(k = 0; k < NLOCKS; k++){
-		proctab[pid].locktype[k] = FREE;
+		proctab[pid].lock_type[k] = FREE;
 		proctab[pid].lock_q_wait_time[k] = 0;
 	}
 
