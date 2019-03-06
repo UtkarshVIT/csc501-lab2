@@ -26,20 +26,20 @@ int get_next_process(int lock_index){
         //kprintf("%d, %d", ctr, q[ctr].qkey);
         if(proctab[ctr].locktype[lock_index] == WRITE){
             //kprintf("yoyoyo");
-            //kprintf("%lu, %lu", best_writer_time, proctab[ctr].plreqtime[lock_index]);
-            if(best_writer_priority <= q[ctr].qkey && best_writer_time >= proctab[ctr].plreqtime[lock_index]){
+            //kprintf("%lu, %lu", best_writer_time, proctab[ctr].lock_q_wait_time[lock_index]);
+            if(best_writer_priority <= q[ctr].qkey && best_writer_time >= proctab[ctr].lock_q_wait_time[lock_index]){
                 //kprintf("wwww");
                 best_writer_priority = q[ctr].qkey;
                 best_writer = ctr;
-                best_writer_time = proctab[ctr].plreqtime[lock_index];
+                best_writer_time = proctab[ctr].lock_q_wait_time[lock_index];
             }
         }
         else if(proctab[ctr].locktype[lock_index] == READ){
             //kprintf("yasas");
-            if(best_reader_priority <= q[ctr].qkey && best_reader_time >= proctab[ctr].plreqtime[lock_index]){
+            if(best_reader_priority <= q[ctr].qkey && best_reader_time >= proctab[ctr].lock_q_wait_time[lock_index]){
                 best_reader_priority = q[ctr].qkey;
                 best_reader = ctr;
-                best_reader_time = proctab[ctr].plreqtime[lock_index];
+                best_reader_time = proctab[ctr].lock_q_wait_time[lock_index];
             }
         }
         ctr=q[ctr].qprev;
@@ -56,7 +56,7 @@ int get_next_process(int lock_index){
         return best_reader;
     }
     else{
-        if(proctab[best_reader].plreqtime[lock_index] > proctab[best_writer].plreqtime[lock_index]){
+        if(proctab[best_reader].lock_q_wait_time[lock_index] > proctab[best_writer].lock_q_wait_time[lock_index]){
             //kprintf("here3 %d, \n",best_writer);
             return best_writer;
         }

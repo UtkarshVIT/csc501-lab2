@@ -59,7 +59,7 @@ struct	pentry	{
 	int	fildes[_NFILE];		/* file - device translation	*/
 	int	ppagedev;		/* pageing dgram device		*/
 	int	pwaitret;
-	unsigned int plreqtime[50];
+	unsigned int lock_q_wait_time[50];
 	int locktype[50];
 	int gotDeleted;
 };
