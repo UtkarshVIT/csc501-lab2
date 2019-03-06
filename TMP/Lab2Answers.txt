@@ -1,16 +1,17 @@
-1. 1. One of the solutions to priority inversion is Interrupt Disabling. If we disable interrupts for a process in runnning state, then it cannot be preempted by another process irresepective of priority. This ensures that a lower priority process doesn't get scheduled before a higher priority process.
+1.1. 
+One of the solutions to priority inversion is Interrupt Disabling. If we disable interrupts if a process is in running state, then it cannot be pre-empted by another process irrespective of priority. This ensures that a lower priority process doesn't run before a higher priority process.
 
 1.2. 
 Note: Please refer to the output given below for the explanation of Case 1 and Case 2.
 
 * Case 1 Using r/w locks *
-When we use the impimented read/write locks, priority inversion is tackled. in the test case we first start a writer process W1 which acquires the lock and then sleeps. Paralelly another process random1 is initiated. random1 prints it's name a 100 times and then sleeps. Then we bring process W2 into the queue. W2 cannot acquire the lock and hence goes to sleep. Now as W1 and W2 are waiting on the same lock, the priority of W1 is increased to that of W2 and hence W1 is selected to run. After this, W2 runs and in the end R1 runs. As we can observe after W2 is started, R1 was not able to run before W2. Hence we were able to tackle priority inversion.
+When we use the implemented read/write locks, priority inversion is tackled. In the test case we first start a writer process W1 which acquires the lock and then sleeps. Then another process R1 is initiated. R1 prints its name a 100 times and then sleeps. Now, W2 process runs and as it cannot acquire the lock and hence goes to sleep. As W1 and W2 are accessing the same lock, the priority of W1 is increased to that of W2 and hence W1 is selected to run. After this, W2 is inserted in ready queue and it runs and after it R1 runs. As we can observe after W2 is started, R1 was not able to run before W2. Hence we were able to tackle priority inversion.
 
 * Case 2 Using Xinu Semaphores *
-Simillary to the above situation after R1 wakes up, it is selected to run before W2 bespite having lower priority. Thus priority inversion exists in Xinu Semaphores.
+Similarly to the above situation after R1 wakes up, it is selected to run before W2 despite having lower priority as R1 is the highest priority process in Ready queue. Thus priority inversion exists in Xinu Semaphores.
 
 * Interrupt Disabling method *
-Incase interrupts were disabled then R1 will not be able to preempt W1 and W1 will finish excecuting and put W2 in the ready queue. The scheduler will then pick W2 before R1 due to higher priority thus avoiding priority inversion.
+In case interrupts were disabled then R1 will not be able to pre-empt W1 and W1 will finish executing and put W2 in the ready queue. The scheduler will then pick W2 before R1 due to higher priority thus avoiding priority inversion.
 
 -----------------using custom locks-------------------
   W1: to acquire lock
@@ -36,3 +37,7 @@ R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1R1
   S2: to acquire sem
   S2: acquired sem, sleep 1s
   S2: to release sem
+
+
+2.
+In the given pseudocode let us see the following scenario. Suppose a reader R1 first acquires the resource mutex and enters the critical section. Then writer W1 tries to acquire the resource mutex and enters waiting state. Now another reader R2 enters the critical section as it does not have to acquire the resource mutex. If subsequently many readers enter the critical section, it will lead to starvation of W1. Thus, such a scenario in the pseudocode will result in writer starvation.
