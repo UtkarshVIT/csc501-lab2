@@ -57,11 +57,10 @@ void random4(char *msg, int lck){
         kprintf ("starting %s\n", msg);
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
-        kprintf ("\nsleep 2 sec\n");
+        kprintf ("\nsleep 4 sec\n");
         
-        sleep(2);
+        sleep(4);
         
-        i=0;
         for(i=0;i<100;i++)
                 kprintf("%s", msg);
         kprintf("\n");
