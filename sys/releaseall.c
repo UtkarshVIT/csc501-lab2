@@ -21,7 +21,7 @@ int get_next_process(int lock_index){
     {
         return -1;
     }
-    kprintf("\n");
+    
     while(ctr != lock_list[lock_index].lock_qhead){
         //kprintf("%d, %d", ctr, q[ctr].qkey);
         if(proctab[ctr].lock_type[lock_index] == WRITE){
