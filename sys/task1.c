@@ -104,6 +104,5 @@ int main( )
     testCustomLocks();
     kprintf("\n-----------------using Xinu sem-----------------------\n");
     testSem();
-    shutdown(); 
     return 0;
 }
