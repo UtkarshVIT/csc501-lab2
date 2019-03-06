@@ -1,6 +1,6 @@
 #include <kernel.h>
-#include <proc.h>
 #include <q.h>
+#include <proc.h>
 #include "lock.h"
 
 extern unsigned long ctr1000;
@@ -18,6 +18,7 @@ int lock(int lock_index, int lock_type, int priority){
 	disable(ps);
 	if(lock_index<0 || lock_index>49 || lock_list[lock_index].lock_type == DELETED)
     {
+    	restore(ps);
         return SYSERR;
     }
 
@@ -26,28 +27,24 @@ int lock(int lock_index, int lock_type, int priority){
 		lock_list[lock_index].lock_type = lock_type;
 		proctab[currpid].locktype[lock_index] = lock_type;
 
-		if(lock_type == READ){
-			lock_list[lock_index].reader_count++;
+		if(lock_type == WRITE){
+			lock_list[lock_index].writer_count++;
 		}
 		else{
-			lock_list[lock_index].writer_count++;
+			lock_list[lock_index].reader_count++;
 		}
 	}
 
 	/* If the lock lock_type for this already READ */
 	else if(lock_list[lock_index].lock_type == READ){
-		
-		/* If the request lock_type is WRITE */
-		if (lock_type == WRITE)
-			insert_in_prio_queue(lock_index, priority, lock_type);
-		
+			
 		/* If the request lock_type is READ */
-		else if(lock_type == READ){
+		if(lock_type == READ){
 			int ctr, flag = 0;
 			ctr = q[lock_list[lock_index].lock_lqtail].qprev;
 
-			for (ctr = q[lock_list[lock_index].lock_lqtail].qprev; (ctr != lock_list[lock_index].lock_qhead) && (priority < q[ctr].qkey); ctr = q[ctr].qprev) {
-				if (proctab[ctr].locktype[lock_index] == WRITE) {
+			for(ctr = q[lock_list[lock_index].lock_lqtail].qprev; (ctr!=lock_list[lock_index].lock_qhead) && (priority<q[ctr].qkey); ctr=q[ctr].qprev){
+				if(proctab[ctr].locktype[lock_index]==WRITE){
 					flag = 1;
 					break;
 				}
@@ -63,6 +60,10 @@ int lock(int lock_index, int lock_type, int priority){
 				lock_list[lock_index].lock_type = lock_type;
 			}
 		}
+		/* If the request lock_type is WRITE */
+		else if (lock_type == WRITE)
+			insert_in_prio_queue(lock_index, priority, lock_type);
+
 	}
 
 	else if(lock_list[lock_index].lock_type == WRITE){
