@@ -10,9 +10,9 @@ int ldelete(int lock_index){
 	lock_list[lock_index].lock_type = DELETED;
 	lock_list[lock_index].reader_count = 0;
 	lock_list[lock_index].reader_count = 0;
-	ctr = q[lock_list[lock_index].lock_lqtail].qprev;
+	ctr = lock_list[lock_index].lock_qhead;
 	int flag = 0;		
-	while(getfirst(ctr) != lock_list[lock_index].lock_qhead){
+	while(EMPTY != getfirst(lock_list[lock_index].lock_qhead)){
 		flag = 1;
 		proctab[ctr].gotDeleted = 1;
 		dequeue(ctr);
