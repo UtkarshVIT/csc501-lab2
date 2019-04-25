@@ -19,6 +19,7 @@ int ldelete(int lock_index){
 		ready(ctr, RESCHNO);
 	}
 	if(flag){
+		kprintf("did something here");
 		resched();
 	}
 	kprintf("done");

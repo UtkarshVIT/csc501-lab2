@@ -245,9 +245,11 @@ void test5 ()
         //kprintf("-delete the lock, reader will be waken\n");  
         ldelete (lck);
 
+        kprintf("\nfinished test 5 part 1");
         sleep (5);
         kill(pid1);
         kill(pid2);
+        kprintf("\nfinished test 5 aprt 2");
 }
 
 /*-----------------------------------Test 6---------------------------*/
