@@ -17,6 +17,7 @@ int ldelete(int lock_index){
 		proctab[ctr].gotDeleted = 1;
 		dequeue(ctr);
 		ready(ctr, RESCHNO);
+		kprintf("here");
 	}
 	if(flag){
 		resched();
