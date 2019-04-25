@@ -9,6 +9,7 @@ int lcreate(){
     while(i < NLOCKS){
         if(lock_list[i].lock_type == DELETED || lock_list[i].lock_type == FREE){
             lock_list[i].lock_type = FREE;
+            kprintf("\nLock found. Returning lock %d", i);
             restore(ps);
             return i;
         }
