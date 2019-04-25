@@ -16,6 +16,7 @@
  */
 void release_all_locks_for_process(int pid){
 	int i = 0 ;
+	kprintf("\nrelease_all_locks_for_process %d", pid);
 	while(i < NLOCKS) {
 		if (proctab[pid].lock_type[i] != FREE){
 			release(pid, i);
