@@ -28,11 +28,11 @@ int ldelete(int lock_index){
 		resched();
 	}*/
 	int pid;
-	struct lentry *lptr;
+	struct lock_data *lptr;
 	lptr = &lock_list[lock_index];
 
-	if (nonempty(lptr->lqhead)) {
-		while ((pid = getfirst(lptr->lqhead)) != EMPTY) {
+	if (nonempty(lptr->lock_qhead)) {
+		while ((pid = getfirst(lptr->lock_qhead)) != EMPTY) {
 			//proctab[pid].plwaitret = DELETED;
 			proctab[pid].lock_type[lock_index] = DELETED;
 			dequeue(pid);
