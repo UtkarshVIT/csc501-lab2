@@ -17,14 +17,14 @@ int ldelete(int lock_index){
 	
 	while(EMPTY != getfirst(ctr)){
 		flag = 1;
-		kprintf("\nWaking up: %d", ctr);
+		kprintf("\nWaking up process: %d", ctr);
 		proctab[ctr].gotDeleted = 1;
 		dequeue(ctr);
 		ready(ctr, RESCHNO);
 	}
 
 	if(flag){
-		kprintf("did something here");
+		kprintf("\ncall reschedule");
 		resched();
 	}
 	kprintf("done");
