@@ -29,23 +29,16 @@ int ldelete(int lock_index){
 	}*/
 	int pid;
 	struct lentry *lptr;
-	lptr = &ltable[ldesc];
+	lptr = &lock_list[lock_index];
 
 	if (nonempty(lptr->lqhead)) {
 		while ((pid = getfirst(lptr->lqhead)) != EMPTY) {
-			proctab[pid].plwaitret = DELETED;
-			proctab[pid].locktype[ldesc] = DELETED;
+			//proctab[pid].plwaitret = DELETED;
+			proctab[pid].lock_type[lock_index] = DELETED;
 			dequeue(pid);
 			ready(pid, RESCHNO);
 		}
 		resched();
-	}
-
-	for (pid = 1; pid < NPROC; pid++) {
-		if (ltable[ldesc].holders[pid] == READ
-				|| ltable[ldesc].holders[pid] == WRITE) {
-			ltable[ldesc].holders[pid] = DELETED;
-		}
 	}
 
 	kprintf("\ndone");
