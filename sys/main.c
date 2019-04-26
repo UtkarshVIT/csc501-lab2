@@ -189,13 +189,13 @@ void test4 ()
         lck[0]   = lcreate ();
         //lck[0] should throw an ERROR
         assert (lck[0] != SYSERR,"Test 4 FAILED\n");
-        kprintf("passed here");
+        kprintf("\npassed here");
         //kprintf("val = %d %d %d %d",old_lck,old_lck%NLOCKS,lck[0],lck[0]%NLOCKS);
         
         //kprintf("-try to acquire the old lock\n");
         ret = lock (old_lck, READ, DEFAULT_LOCK_PRIO);
 
-        kprintf("ret value: %d", ret);
+        kprintf("\nret value: %d", ret);
         
         assert (ret == SYSERR,"Test 4 FAILED\n");
 
