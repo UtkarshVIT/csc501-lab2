@@ -134,9 +134,11 @@ void test3 ()
             //kprintf("Val = %d",lck[index]);
             assert (lck[index] != SYSERR,"Test 3 FAILED\n");
         }
+        kprintf("\ncompleted halfway");
 
         //kprintf("-try to allocate one more\n");
         last_lck  = lcreate ();
+        kprintf("Last lock val: %d", last_lck);
         //kprintf("Val = %d",last_lck);
         for (index = 0; index < NLOCKS; index++) {
                 //kprintf("val = %d",lck[index]);
@@ -702,10 +704,10 @@ int main( )
 {
     //test1();
      //test2();
-     //test3();
+     test3();
      //test4();
      //test5();
-     test6();
+     //test6();
      //test7();
      //test8();
      //test9();
