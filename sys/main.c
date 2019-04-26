@@ -183,7 +183,7 @@ void test4 ()
     
         lck[0]   = lcreate ();
         assert (lck[0] != SYSERR,"Test 4 FAILED\n");
-        kpritnf("passed here");
+        kprintf("passed here");
         //kprintf("val = %d %d %d %d",old_lck,old_lck%NLOCKS,lck[0],lck[0]%NLOCKS);
         
         //kprintf("-try to acquire the old lock\n");
