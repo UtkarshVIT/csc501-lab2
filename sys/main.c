@@ -197,7 +197,7 @@ void test4 ()
 
         kprintf("\nret value: %d", ret);
         
-        assert (ret == SYSERR,"Test 4 FAILED\n");
+        assert (ret == SYSERR,"\nTest 4 FAILED\n");
 
         
         for (index = 0; index < NLOCKS; index++) {
@@ -214,7 +214,7 @@ void test4 ()
 void reader5 (char *msg, int lck)
 {
     int ret;
-    kprintf("waking up reader");
+    kprintf("\nwaking up reader");
     //kprintf ("  %s: to acquire lock, will be blocked\n", msg);
     ret = lock (lck, READ, DEFAULT_LOCK_PRIO);
     assert (ret == DELETED,"Test 5 FAILED\n");
@@ -225,6 +225,7 @@ void reader5 (char *msg, int lck)
 
 void writer5 (char *msg, int lck)
 {
+    kprintf("\ncreating writer");
         lock (lck, WRITE, DEFAULT_LOCK_PRIO);
         //kprintf ("  %s: acquired lock, sleep 5s\n", msg);
         sleep (5);
@@ -715,8 +716,8 @@ int main( )
     //test1();
      //test2();
      //test3();
-     test4();
-     //test5();
+     //test4();
+     test5();
      //test6();
      //test7();
      //test8();
