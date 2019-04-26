@@ -36,7 +36,7 @@ int ldelete(int lock_index){
 		kprintf("\nremoving");
 		while ((pid = getfirst(lptr->lock_qhead)) != EMPTY) {
 			//proctab[pid].plwaitret = DELETED;
-			kpritnf("\nremoving %d", pid);
+			kprintf("\nremoving %d", pid);
 			proctab[pid].lock_type[lock_index] = DELETED;
 			dequeue(pid);
 			ready(pid, RESCHNO);
