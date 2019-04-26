@@ -623,8 +623,8 @@ void test11 ()
         //kprintf("-start writer A. write A is granted lock1, and block on lock2<25>\n");
         resume (wr1);
         sleep (1);
-    
         assert (getprio (wr2) == 25,"Test 11 FAILED\n");
+        kprintf("\nreached here");
     
         //kprintf("-start reader C, reader C<30> will block on lock1\n");
         resume (rd1);
