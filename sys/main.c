@@ -206,7 +206,7 @@ void test4 ()
 void reader5 (char *msg, int lck)
 {
     int ret;
-
+    kprintf("waking up reader");
     //kprintf ("  %s: to acquire lock, will be blocked\n", msg);
     ret = lock (lck, READ, DEFAULT_LOCK_PRIO);
     assert (ret == DELETED,"Test 5 FAILED\n");
