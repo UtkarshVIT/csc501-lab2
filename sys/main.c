@@ -250,6 +250,7 @@ void test5 ()
 
         kprintf("\nfinished test 5 part 1");
         sleep (5);
+        kprintf("\ndone sleeping");
         kill(pid1);
         kill(pid2);
         kprintf("\nfinished test 5 aprt 2");
@@ -706,8 +707,8 @@ int main( )
     //test1();
      //test2();
      //test3();
-     test4();
-     //test5();
+     //test4();
+     test5();
      //test6();
      //test7();
      //test8();
