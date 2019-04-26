@@ -218,7 +218,7 @@ void reader5 (char *msg, int lck)
     //kprintf ("  %s: to acquire lock, will be blocked\n", msg);
     ret = lock (lck, READ, DEFAULT_LOCK_PRIO);
     assert (ret == DELETED,"Test 5 FAILED\n");
-    kprintf ("Test 5 PASSED!\n");
+    kprintf ("\nTest 5 PASSED!\n");
     totalpassed += 1;
     //kprintf ("  %s: lock deleted while waiting\n", msg);
 }
@@ -249,10 +249,12 @@ void test5 ()
         //kprintf("-start writer, then sleep 1s\n");
         resume(pid1);
         sleep (1);
-
+        kprintf("\ncreating writer %d", pid1);
+        
         //kprintf("-start reader, then sleep 1s\n");
         resume(pid2);
         sleep (1);
+        kprintf("\ncreating reader %d", pid2);
 
         //kprintf("-delete the lock, reader will be waken\n");  
         ldelete (lck);
