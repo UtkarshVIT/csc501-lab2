@@ -178,16 +178,22 @@ void test4 ()
         }
 
         //kprintf("-release the first lock, then create it again\n");
+        //points to old lock
         old_lck  = lck[0];
+
+        //delete the old lock
         ldelete (lck[0]);
     
+        //create a new lock on lck[0]
         lck[0]   = lcreate ();
+        //lck[0] should throw an ERROR
         assert (lck[0] != SYSERR,"Test 4 FAILED\n");
         kprintf("passed here");
         //kprintf("val = %d %d %d %d",old_lck,old_lck%NLOCKS,lck[0],lck[0]%NLOCKS);
         
         //kprintf("-try to acquire the old lock\n");
         ret = lock (old_lck, READ, DEFAULT_LOCK_PRIO);
+        kprintf("ret value: %d", ret);
         
         assert (ret == SYSERR,"Test 4 FAILED\n");
     
@@ -707,14 +713,14 @@ int main( )
     //test1();
      //test2();
      //test3();
-     //test4();
+     test4();
      //test5();
      //test6();
      //test7();
      //test8();
      //test9();
      //test10();
-     test11();
+     //test11();
      //test12();
     kprintf("\n--------------SUMMARY------------\n");
     kprintf("PASSED: %d, FAILED: %d, TOTAL: %d\n",totalpassed,totalfailed,totalpassed+totalfailed);
