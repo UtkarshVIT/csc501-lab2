@@ -30,6 +30,7 @@ int ldelete(int lock_index){
 	int pid;
 	struct lock_data *lptr;
 	lptr = &lock_list[lock_index];
+	kprintf("\ndeleting lock %d", lock_index);
 
 	if (nonempty(lptr->lock_qhead)) {
 		while ((pid = getfirst(lptr->lock_qhead)) != EMPTY) {
