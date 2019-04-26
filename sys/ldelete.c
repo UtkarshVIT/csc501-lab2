@@ -7,7 +7,7 @@ int ldelete(int lock_index){
 	STATWORD ps;
 	int ctr;
 	disable(ps);
-	/*
+	
 	lock_list[lock_index].lock_type = DELETED;
 	lock_list[lock_index].reader_count = 0;
 	lock_list[lock_index].reader_count = 0;
@@ -26,7 +26,8 @@ int ldelete(int lock_index){
 	if(flag){
 		kprintf("\ncall reschedule");
 		resched();
-	}*/
+	}
+	/*
 	int pid;
 	struct lock_data *lptr;
 	lptr = &lock_list[lock_index];
@@ -42,7 +43,7 @@ int ldelete(int lock_index){
 			ready(pid, RESCHNO);
 		}
 		resched();
-	}
+	}*/
 
 	kprintf("\ndone");
 	restore(ps);
