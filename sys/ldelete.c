@@ -11,11 +11,12 @@ int ldelete(int lock_index){
 	lock_list[lock_index].lock_type = DELETED;
 	lock_list[lock_index].reader_count = 0;
 	lock_list[lock_index].reader_count = 0;
-	ctr = q[lock_list[lock_index].lock_lqtail].qprev;
+	//ctr = q[lock_list[lock_index].lock_lqtail].qprev;
+	ctr = lock_list[lock_index].lock_lqtail;
 	
 	int flag = 0;		
 	
-	while(EMPTY != ctr){
+	while(EMPTY != getlast(ctr)){
 		flag = 1;
 		kprintf("\nWaking up process: %d", ctr);
 		proctab[ctr].gotDeleted = 1;
@@ -27,6 +28,7 @@ int ldelete(int lock_index){
 		kprintf("\ncall reschedule");
 		resched();
 	}
+
 	/*
 	int pid;
 	struct lock_data *lptr;
