@@ -174,7 +174,7 @@ void test4 ()
                 //kprintf("Isempty = %d",isempty(locks[lck[index] % NLOCKS].lwriteqhead));
                 //kprintf("Isempty = %d",isempty(locks[lck[index] % NLOCKS].lreadqhead));
                 //kprintf("Val = %d",lck[index]);
-                assert (lck[index] != SYSERR,"Test 4 FAILED\n");
+                assert (lck[index] != SYSERR,"\nTest 4 FAILED\n");
         }
 
         //kprintf("-release the first lock, then create it again\n");
