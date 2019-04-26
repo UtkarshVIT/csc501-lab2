@@ -11,15 +11,15 @@ int ldelete(int lock_index){
 	lock_list[lock_index].lock_type = DELETED;
 	lock_list[lock_index].reader_count = 0;
 	lock_list[lock_index].reader_count = 0;
-	ctr = lock_list[lock_index].lock_qhead;
+	ctr = q[lock_list[lock_index].lock_lqtail].qprev;
 	
 	int flag = 0;		
 	
-	while(EMPTY != getfirst(ctr)){
+	while(EMPTY != ctr){
 		flag = 1;
 		kprintf("\nWaking up process: %d", ctr);
 		proctab[ctr].gotDeleted = 1;
-		dequeue(ctr);
+		ctr = dequeue(ctr);
 		ready(ctr, RESCHNO);
 	}
 
