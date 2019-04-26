@@ -180,6 +180,7 @@ void test4 ()
         //kprintf("-release the first lock, then create it again\n");
         //points to old lock
         old_lck  = lck[0];
+        kprintf("\n%d", old_lck);
 
         //delete the old lock
         ldelete (lck[0]);
@@ -197,7 +198,7 @@ void test4 ()
         kprintf("ret value: %d", ret);
         
         assert (ret == SYSERR,"Test 4 FAILED\n");
-        
+
         
         for (index = 0; index < NLOCKS; index++) {
                 //kprintf ("Deleting %d!\n",lck[index]);
