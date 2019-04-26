@@ -7,7 +7,7 @@ int ldelete(int lock_index){
 	STATWORD ps;
 	int ctr;
 	disable(ps);
-	
+	/*
 	lock_list[lock_index].lock_type = DELETED;
 	lock_list[lock_index].reader_count = 0;
 	lock_list[lock_index].reader_count = 0;
@@ -26,8 +26,29 @@ int ldelete(int lock_index){
 	if(flag){
 		kprintf("\ncall reschedule");
 		resched();
+	}*/
+	int pid;
+	struct lentry *lptr;
+	lptr = &ltable[ldesc];
+
+	if (nonempty(lptr->lqhead)) {
+		while ((pid = getfirst(lptr->lqhead)) != EMPTY) {
+			proctab[pid].plwaitret = DELETED;
+			proctab[pid].locktype[ldesc] = DELETED;
+			dequeue(pid);
+			ready(pid, RESCHNO);
+		}
+		resched();
 	}
-	kprintf("done");
+
+	for (pid = 1; pid < NPROC; pid++) {
+		if (ltable[ldesc].holders[pid] == READ
+				|| ltable[ldesc].holders[pid] == WRITE) {
+			ltable[ldesc].holders[pid] = DELETED;
+		}
+	}
+
+	kprintf("\ndone");
 	restore(ps);
 	return(OK);
 }
