@@ -22,6 +22,8 @@ int lock(int lock_index, int lock_type, int priority){
         return SYSERR;
     }
 
+	kprintf("\n The lock value is %d", lock_list[lock_index].lock_type);
+
 	/* If the lock lock_type in FREE */
 	if(lock_list[lock_index].lock_type == FREE){
 		lock_list[lock_index].lock_type = lock_type;

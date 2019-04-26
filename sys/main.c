@@ -193,10 +193,11 @@ void test4 ()
         
         //kprintf("-try to acquire the old lock\n");
         ret = lock (old_lck, READ, DEFAULT_LOCK_PRIO);
+
         kprintf("ret value: %d", ret);
         
         assert (ret == SYSERR,"Test 4 FAILED\n");
-    
+        
         
         for (index = 0; index < NLOCKS; index++) {
                 //kprintf ("Deleting %d!\n",lck[index]);
