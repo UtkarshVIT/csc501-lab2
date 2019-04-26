@@ -263,7 +263,7 @@ void test5 ()
 
         kprintf("\nfinished test 5 part 1");
         sleep (5);
-        kprintf("\ndone sleeping");
+        kprintf("\nmain done sleeping");
         kill(pid1);
         kill(pid2);
         kprintf("\nfinished test 5 aprt 2");

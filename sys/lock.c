@@ -26,6 +26,7 @@ int lock(int lock_index, int lock_type, int priority){
 
 	/* If the lock lock_type in FREE */
 	if(lock_list[lock_index].lock_type == FREE){
+		kprintf("\nlock was FREE");
 		lock_list[lock_index].lock_type = lock_type;
 		proctab[currpid].lock_type[lock_index] = lock_type;
 
@@ -39,6 +40,7 @@ int lock(int lock_index, int lock_type, int priority){
 
 	/* If the lock lock_type for this already READ */
 	else if(lock_list[lock_index].lock_type == READ){
+		kprintf("\nlock was READ");
 			
 		/* If the request lock_type is READ */
 		if(lock_type == READ){
@@ -70,6 +72,7 @@ int lock(int lock_index, int lock_type, int priority){
 	}
 
 	else if(lock_list[lock_index].lock_type == WRITE){
+		kprintf("\nlock was WRITE");
 		kprintf("\nhave to insert in pqueue");
 		insert_in_prio_queue(lock_index, priority, lock_type);
 	} 
