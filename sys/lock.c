@@ -64,6 +64,7 @@ int lock(int lock_index, int lock_type, int priority){
 		}
 		/* If the request lock_type is WRITE */
 		else if (lock_type == WRITE)
+			kprintf("\nhave to insert in pqueue");
 			insert_in_prio_queue(lock_index, priority, lock_type);
 
 	}
