@@ -16,7 +16,9 @@ void insert_in_prio_queue(int lock_index, int priority, int lock_type){
 int lock(int lock_index, int lock_type, int priority){
 	STATWORD ps;
 	disable(ps);
-	if(lock_index<0 || lock_index>49 || lock_list[lock_index].lock_type == DELETED)
+	if(lock_list[lock_index].lock_type == DELETED)
+		return DELETED;
+	if(lock_index<0 || lock_index>49)
     {
     	restore(ps);
         return SYSERR;
