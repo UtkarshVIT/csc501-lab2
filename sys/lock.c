@@ -29,6 +29,7 @@ int lock(int lock_index, int lock_type, int priority){
 	if(lock_list[lock_index].lock_type == FREE){
 		kprintf("\nlock was FREE");
 		lock_list[lock_index].lock_type = lock_type;
+		kprintf("lock is set to: %d", lock_list[lock_index].lock_type);
 		proctab[currpid].lock_type[lock_index] = lock_type;
 
 		if(lock_type == WRITE){
