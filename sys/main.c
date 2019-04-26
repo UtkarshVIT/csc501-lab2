@@ -228,7 +228,9 @@ void writer5 (char *msg, int lck)
     kprintf("\ncreating writer");
         lock (lck, WRITE, DEFAULT_LOCK_PRIO);
         //kprintf ("  %s: acquired lock, sleep 5s\n", msg);
+        kprintf("\nwriter sleeping");
         sleep (5);
+        kprintf("\nwriter waking up");
         //kprintf ("  %s: to release lock\n", msg);
         releaseall (1, lck);
 }
