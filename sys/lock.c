@@ -16,7 +16,7 @@ void insert_in_prio_queue(int lock_index, int priority, int lock_type){
 int lock(int lock_index, int lock_type, int priority){
 	STATWORD ps;
 	disable(ps);
-	kprintf("\n Print log: %d, %d, %d, %d, %d",lock_list[lock_index].lock_type, DELETED, FREE, READ, WRITE);
+	kprintf("\n Print log: $d, %d, %d, %d, %d, %d",lock_type, lock_list[lock_index].lock_type, DELETED, FREE, READ, WRITE);
 	if(lock_index<0 || lock_index>49 || lock_list[lock_index].lock_type == DELETED)
     {
     	restore(ps);
