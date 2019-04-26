@@ -70,6 +70,7 @@ int lock(int lock_index, int lock_type, int priority){
 	}
 
 	else if(lock_list[lock_index].lock_type == WRITE){
+		kprintf("\nhave to insert in pqueue");
 		insert_in_prio_queue(lock_index, priority, lock_type);
 	} 
 
